@@ -268,7 +268,7 @@ body {
 }
 
 .principal-photo-wrap {
-  margin: 40px auto 0; 
+  margin: 80px auto 0; /* DIUBAH: Jarak atas ditambah jadi 80px agar tidak menabrak teks sekolah */
   width: 220px; height: 220px; 
   position: relative;
   display: flex; align-items: center; justify-content: center;
@@ -293,7 +293,7 @@ body {
   width: 220px; height: 220px; 
   border-radius: 50%;
   object-fit: cover;
-  object-position: center;
+  object-position: center 15%; /* DIUBAH: Fokus gambar diturunkan ke 15% dari atas agar kepala utuh */
   border: 6px solid var(--gold);
   display: block;
   background: var(--navy3);
