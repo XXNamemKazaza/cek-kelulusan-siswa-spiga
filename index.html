@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cek Kelulusan — SMP PGRI 3 Denpasar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --navy:    #08101f;
+  --navy2:   #0d1a30;
+  --navy3:   #122040;
+  --gold:    #c9a84c;
+  --gold2:   #e8c96c;
+  --gold3:   #f5e0a0;
+  --cream:   #f8f3e8;
+  --muted:   rgba(248,243,232,0.55);
+  --border:  rgba(201,168,76,0.22);
+  --glass:   rgba(255,255,255,0.04);
+  --r:       16px;
+  --rb:      28px;
+}
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── ORNAMENTATION ──────────────────────────────────────── */
+.orb {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  filter: blur(80px); opacity: 0.18;
+}
+
+/* ─── WRAPPER ────────────────────────────────────────────── */
+#app {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SPLASH SCREEN
+══════════════════════════════════════════════════════════ */
+#splash {
+  position: absolute; inset: 0; z-index: 100;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#splash.out {
+  opacity: 0;
+  transform: scale(1.06);
+  pointer-events: none;
+}
+.splash-bg1 { width: 340px; height: 340px; background: #1a3a6e; top: -80px; right: -80px; }
+.splash-bg2 { width: 280px; height: 280px; background: #7a5a12; bottom: 60px; left: -60px; }
+
+.splash-emblem {
+  width: 100px; height: 100px; margin-bottom: 32px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  animation: emblem-in 1s cubic-bezier(.34,1.56,.64,1) both;
+}
+.splash-emblem::before {
+  content: '';
+  position: absolute; inset: -8px;
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 50%;
+  animation: ring-spin 8s linear infinite;
+}
+.splash-emblem svg { width: 52px; height: 52px; }
+
+.splash-school {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--gold2);
+  text-align: center; line-height: 1.15;
+  position: relative; z-index: 2;
+  animation: fadeup 1s ease 0.3s both;
+}
+.splash-year {
+  font-size: 13px; font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  margin-top: 8px; margin-bottom: 40px;
+  position: relative; z-index: 2;
+  animation: fadeup 1s ease 0.5s both;
+}
+.splash-divider {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-bottom: 40px; position: relative; z-index: 2;
+  animation: fadeup 1s ease 0.7s both;
+}
+.splash-tagline {
+  font-size: 14px; font-weight: 300;
+  color: var(--muted); letter-spacing: 0.08em;
+  position: relative; z-index: 2;
+  animation: fadeup 1s ease 0.9s both;
+}
+.splash-loader {
+  position: absolute; bottom: 60px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 2;
+}
+.splash-loader span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold);
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+.splash-loader span:nth-child(2) { animation-delay: 0.2s; }
+.splash-loader span:nth-child(3) { animation-delay: 0.4s; }
+
+/* ══════════════════════════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════════════════════════ */
+#main {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  opacity: 0; transition: opacity 0.6s ease;
+}
+#main.visible { opacity: 1; }
+
+/* ─── TOP BAR ─────────────────────────────────────────── */
+.topbar {
+  flex-shrink: 0;
+  padding: 18px 20px 14px;
+  display: flex; flex-direction: column; align-items: center;
+  background: linear-gradient(180deg, var(--navy) 0%, transparent 100%);
+  position: relative; z-index: 10;
+}
+.topbar-school {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 600;
+  color: var(--gold2); letter-spacing: 0.03em;
+}
+.topbar-year {
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;
+}
+
+/* ─── STEP DOTS ────────────────────────────────────────── */
+.dots {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 10px 0 6px;
+}
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(201,168,76,0.25);
+  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer;
+}
+.dot.active {
+  background: var(--gold);
+  width: 24px; border-radius: 3px;
+  box-shadow: 0 0 8px rgba(201,168,76,0.5);
+}
+
+/* ─── PAGES AREA ───────────────────────────────────────── */
+.pages {
+  flex: 1; overflow: hidden; position: relative;
+}
+.page {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 0 20px 140px;
+  opacity: 0; pointer-events: none;
+  transform: translateX(40px);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1);
+}
+.page.active {
+  opacity: 1; pointer-events: auto;
+  transform: translateX(0);
+}
+.page.exit-left {
+  opacity: 0; transform: translateX(-40px);
+}
+
+/* ─── NEXT BUTTON ──────────────────────────────────────── */
+.btn-next {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 200px; height: 56px;
+  background: linear-gradient(135deg, #c9a84c 0%, #e8c96c 50%, #c9a84c 100%);
+  background-size: 200% 100%;
+  border: none; border-radius: 100px;
+  color: var(--navy); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.06em;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.3),
+    0 8px 24px rgba(201,168,76,0.35),
+    0 2px 6px rgba(0,0,0,0.4);
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+  animation: btn-glow 3s ease-in-out infinite, fadeup 0.8s ease 1.2s both;
+}
+.btn-next:hover {
+  transform: translateX(-50%) translateY(-4px) scale(1.03);
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.5),
+    0 16px 40px rgba(201,168,76,0.5),
+    0 4px 12px rgba(0,0,0,0.4);
+  background-position: 100% 0;
+}
+.btn-next:active {
+  transform: translateX(-50%) translateY(-1px) scale(0.98);
+}
+.btn-next svg {
+  width: 18px; height: 18px; flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.btn-next:hover svg { transform: translateX(4px); }
+
+/* Ripple */
+.btn-next::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: 100px;
+  background: rgba(255,255,255,0.15);
+  opacity: 0; transform: scale(0.8);
+}
+.btn-next:active::after {
+  animation: ripple 0.4s ease;
+}
+
+/* ─── PAGE CONTENT COMPONENTS ──────────────────────────── */
+
+/* Photo */
+.principal-photo-wrap {
+  margin: 24px auto 0;
+  width: 110px; height: 110px;
+  position: relative;
+}
+.principal-photo-wrap::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.4);
+}
+.principal-photo-wrap::after {
+  content: '';
+  position: absolute; inset: -12px;
+  border-radius: 50%;
+  border: 1px dashed rgba(201,168,76,0.15);
+  animation: ring-spin 20s linear infinite;
+}
+.principal-photo {
+  width: 110px; height: 110px; border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold);
+  display: block;
+  background: var(--navy3);
+}
+.principal-name {
+  text-align: center; margin-top: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 600;
+  color: var(--gold2); letter-spacing: 0.01em;
+}
+.principal-title {
+  text-align: center; font-size: 12px;
+  color: var(--muted); letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+/* Section heading */
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  margin: 28px 0 16px;
+}
+.section-label::before,
+.section-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border));
+}
+.section-label::after {
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+.section-label span {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); white-space: nowrap;
+}
+
+/* Speech card */
+.speech-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--rb);
+  padding: 24px 22px;
+  backdrop-filter: blur(20px);
+}
+.speech-card p {
+  font-size: 14.5px; line-height: 1.85; color: var(--cream);
+  margin-bottom: 14px; text-align: justify;
+  opacity: 0.88;
+}
+.speech-card p:last-child { margin-bottom: 0; }
+.speech-opener {
+  font-style: italic; font-size: 14px;
+  color: var(--gold3); opacity: 1 !important;
+}
+
+/* Info card */
+.info-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 12px;
+}
+.info-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(201,168,76,0.08);
+  display: flex; align-items: center; justify-content: center;
+}
+.info-icon svg { width: 18px; height: 18px; stroke: var(--gold); }
+.info-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.info-val { font-size: 14px; font-weight: 500; color: var(--cream); margin-top: 3px; }
+
+/* ─── PAGE 3: FORM ─────────────────────────────────────── */
+.form-hero {
+  text-align: center; padding-top: 16px; margin-bottom: 28px;
+}
+.form-hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 700;
+  color: var(--gold2);
+}
+.form-hero-sub {
+  font-size: 13px; color: var(--muted); margin-top: 6px;
+}
+
+.input-group { margin-bottom: 18px; }
+.input-label {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 8px; font-weight: 600;
+}
+.input-field {
+  width: 100%; padding: 15px 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+}
+.input-field::placeholder { color: rgba(248,243,232,0.28); }
+.input-field:focus {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.06);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+
+.btn-check {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, #c9a84c, #e8c96c, #c9a84c);
+  background-size: 200% 100%;
+  border: none; border-radius: var(--r);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--navy); letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+}
+.btn-check:hover {
+  background-position: 100% 0;
+  box-shadow: 0 12px 32px rgba(201,168,76,0.45);
+  transform: translateY(-2px);
+}
+.btn-check:active { transform: translateY(0); }
+.btn-check:disabled {
+  opacity: 0.5; cursor: not-allowed; transform: none;
+}
+
+.alert-err {
+  margin-top: 14px; padding: 14px 16px;
+  background: rgba(162,36,36,0.15);
+  border: 1px solid rgba(240,80,80,0.3);
+  border-radius: var(--r);
+  font-size: 13px; color: #f8a0a0;
+  display: flex; align-items: flex-start; gap: 10px;
+  animation: fadeup 0.3s ease;
+}
+.alert-err svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; stroke: #f87171; }
+
+/* ─── RESULT MODAL ─────────────────────────────────────── */
+#modal {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(8,16,31,0.85);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#modal.open {
+  opacity: 1; pointer-events: auto;
+}
+.modal-sheet {
+  width: 100%; max-width: 480px;
+  background: linear-gradient(180deg, var(--navy2) 0%, #0a1525 100%);
+  border-radius: 36px 36px 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 16px 28px 50px;
+  text-align: center;
+  transform: translateY(60px);
+  transition: transform 0.5s cubic-bezier(.34,1.56,.64,1);
+  position: relative; overflow: hidden;
+}
+#modal.open .modal-sheet {
+  transform: translateY(0);
+}
+.modal-sheet-bg1 { width: 240px; height: 240px; background: #c9a84c; top: -100px; right: -60px; filter: blur(120px); opacity: 0.15; }
+.modal-sheet-bg2 { width: 200px; height: 200px; background: #1a3a8a; bottom: -60px; left: -40px; filter: blur(100px); opacity: 0.2; }
+
+.modal-handle {
+  width: 44px; height: 4px; background: rgba(248,243,232,0.15);
+  border-radius: 2px; margin: 0 auto 28px;
+}
+.modal-trophy {
+  font-size: 64px; margin-bottom: 12px;
+  animation: trophy-pop 0.8s cubic-bezier(.34,1.56,.64,1) 0.1s both;
+  display: block; line-height: 1;
+}
+.modal-congrats {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; font-weight: 400;
+  color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px; font-weight: 700;
+  color: var(--gold2); line-height: 1.15;
+  margin-bottom: 24px;
+}
+.modal-divider {
+  width: 50px; height: 1px; margin: 0 auto 24px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.modal-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.modal-row:last-of-type { border-bottom: none; }
+.modal-row-label {
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.modal-row-val {
+  font-size: 16px; font-weight: 600;
+  color: var(--gold2); text-align: right; max-width: 60%;
+}
+.modal-card {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: 4px 0 8px;
+  margin-bottom: 28px;
+}
+.btn-close {
+  width: 100%; padding: 15px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--gold2); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-close:hover { background: rgba(201,168,76,0.18); }
+
+/* Confetti particles */
+.confetti-wrap {
+  position: absolute; inset: 0; pointer-events: none;
+  border-radius: 36px 36px 0 0; overflow: hidden;
+}
+.cp {
+  position: absolute; top: -10px;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  animation: fall-c 2.5s ease-in forwards;
+  opacity: 0;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────── */
+@keyframes emblem-in {
+  from { transform: scale(0.6) rotate(-20deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1; }
+}
+@keyframes ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes btn-glow {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4); }
+  50%       { box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 8px 36px rgba(201,168,76,0.55), 0 2px 6px rgba(0,0,0,0.4); }
+}
+@keyframes ripple {
+  to { opacity: 1; transform: scale(1.5); opacity: 0; }
+}
+@keyframes trophy-pop {
+  from { transform: scale(0.4) translateY(20px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes fall-c {
+  0%   { top: -10px; opacity: 1; }
+  100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(var(--dx)); }
+}
+
+/* Scrollbar */
+.page::-webkit-scrollbar { width: 3px; }
+.page::-webkit-scrollbar-track { background: transparent; }
+.page::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     SPLASH SCREEN
+════════════════════════════════════════ -->
+<div id="splash">
+  <div class="orb splash-bg1"></div>
+  <div class="orb splash-bg2"></div>
+
+  <div class="splash-emblem">
+    <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M26 4L30.5 16h12.5l-10 7.5 4 12.5L26 32l-11 8 4-12.5L9 20h12.5z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+      <circle cx="26" cy="26" r="10" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3 2"/>
+      <circle cx="26" cy="26" r="3" fill="#c9a84c"/>
+    </svg>
+  </div>
+
+  <div class="splash-school">SMP PGRI 3<br>Denpasar</div>
+  <div class="splash-year">Tahun Pelajaran 2025 / 2026</div>
+  <div class="splash-divider"></div>
+  <div class="splash-tagline">Pengumuman Kelulusan Resmi</div>
+
+  <div class="splash-loader">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════ -->
+<div id="main">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-school">SMP PGRI 3 Denpasar</div>
+    <div class="topbar-year">Tahun Pelajaran 2025 / 2026</div>
+  </div>
+
+  <!-- Dots -->
+  <div class="dots">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+  </div>
+
+  <!-- Pages -->
+  <div class="pages">
+
+    <!-- ─── PAGE 1: SAMBUTAN ─────────────────── -->
+    <div class="page active" id="p0">
+      <div class="principal-photo-wrap" style="margin-top:20px;">
+        <!-- ▼ TEMPEL LINK FOTO KEPALA SEKOLAH DI SINI ▼ -->
+        <img class="principal-photo" id="photo-p1"
+             src="LINK_FOTO_KEPALA_SEKOLAH_DISINI"
+             alt="Foto Kepala Sekolah"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
+      </div>
+      <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+      <div class="principal-title">Kepala Sekolah</div>
+
+      <div class="section-label"><span>Sambutan</span></div>
+
+      <div class="speech-card">
+        <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam sejahtera untuk kita semua,</p>
+        <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.</p>
+        <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
+        <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan proses pendidikan dengan baik.</p>
+        <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses pendidikan hingga pada tahap ini.</p>
+        <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti bermimpi.</p>
+        <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
+        <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
+      </div>
+    </div>
+
+    <!-- ─── PAGE 2: INFO KELULUSAN ──────────── -->
+    <div class="page" id="p1">
+      <div class="principal-photo-wrap" style="margin-top:20px;">
+        <!-- ▼ TEMPEL LINK FOTO KEPALA SEKOLAH DI SINI (halaman 2) ▼ -->
+        <img class="principal-photo" id="photo-p2"
+             src="LINK_FOTO_KEPALA_SEKOLAH_DISINI"
+             alt="Foto Kepala Sekolah"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
+      </div>
+      <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+      <div class="principal-title">Kepala Sekolah</div>
+
+      <div class="section-label"><span>Pengumuman Kelulusan</span></div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div>
+          <div class="info-label">Tanggal Pengumuman</div>
+          <div class="info-val">Rabu, 28 Mei 2026</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="info-label">Jenjang</div>
+          <div class="info-val">SMP PGRI 3 Denpasar — Kelas IX</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="info-label">Tahun Pelajaran</div>
+          <div class="info-val">2025 / 2026</div>
+        </div>
+      </div>
+
+      <div class="section-label"><span>Ketentuan</span></div>
+
+      <div class="speech-card">
+        <p>Peserta didik dinyatakan lulus apabila telah memenuhi seluruh persyaratan kelulusan sesuai ketentuan yang berlaku, termasuk penyelesaian seluruh program pembelajaran dan penilaian akhir jenjang.</p>
+        <p>Untuk memverifikasi kelulusan, silakan masukkan <strong style="color:var(--gold2);">NIS</strong> dan <strong style="color:var(--gold2);">Nama Lengkap</strong> sesuai data yang terdaftar di sekolah pada halaman selanjutnya.</p>
+        <p>Jika terdapat kekeliruan data atau pertanyaan lebih lanjut, harap menghubungi pihak sekolah secara langsung.</p>
+      </div>
+    </div>
+
+    <!-- ─── PAGE 3: CEK KELULUSAN ───────────── -->
+    <div class="page" id="p2">
+      <div class="form-hero">
+        <div class="form-hero-title">Cek Kelulusan</div>
+        <div class="form-hero-sub">Masukkan data sesuai absensi sekolah</div>
+      </div>
+
+      <div style="background:var(--glass); border:1px solid var(--border); border-radius:var(--rb); padding:28px 22px;">
+        <div class="input-group">
+          <label class="input-label" for="nisInput">NIS — Nomor Induk Siswa</label>
+          <input class="input-field" id="nisInput" type="text" inputmode="numeric" placeholder="Contoh: 12345" maxlength="10" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="namaInput">Nama Lengkap</label>
+          <input class="input-field" id="namaInput" type="text" placeholder="Contoh: ANDI WIJAYA" autocomplete="off"
+                 oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div id="errBox"></div>
+        <button class="btn-check" onclick="cekKelulusan()">Periksa Kelulusan</button>
+      </div>
+
+      <div style="text-align:center; margin-top:20px; font-size:12px; color:var(--muted); line-height:1.7;">
+        Jika data tidak ditemukan, pastikan penulisan<br>NIS dan nama sesuai dengan data sekolah.
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- Next Button -->
+  <button class="btn-next" id="btnNext" onclick="nextPage()">
+    <span id="btnNextLabel">Sambutan Kepala Sekolah</span>
+    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
+    </svg>
+  </button>
+
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════
+     RESULT MODAL
+════════════════════════════════════════ -->
+<div id="modal" onclick="closeModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="orb modal-sheet-bg1"></div>
+    <div class="orb modal-sheet-bg2"></div>
+    <div class="confetti-wrap" id="confettiWrap"></div>
+
+    <div class="modal-handle"></div>
+    <span class="modal-trophy">🏆</span>
+    <div class="modal-congrats">Selamat!</div>
+    <div class="modal-title">Anda Telah<br>Dinyatakan Lulus</div>
+    <div class="modal-divider"></div>
+
+    <div class="modal-card" id="modalInfo">
+      <!-- rows inserted here -->
+    </div>
+
+    <button class="btn-close" onclick="closeModal()">Tutup</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ───────────────────────────────────────────────────────────
+   ▼▼▼  DATA SISWA  ▼▼▼
+   Format: { nis: 'NOMOR', nama: 'NAMA HURUF KAPITAL' }
+   Tambahkan atau ganti data di bawah ini sesuai daftar siswa.
+─────────────────────────────────────────────────────────── */
+const DATA_SISWA = [
+  { nis: '12345', nama: 'TESTER' },
+  { nis: '001',   nama: 'ANDI WIJAYA' },
+  { nis: '002',   nama: 'BUDI SANTOSO' },
+  { nis: '003',   nama: 'CITRA DEWI' },
+  { nis: '004',   nama: 'DONI HERMAWAN' },
+  { nis: '005',   nama: 'ERIN WIJAYA' }
+  /* ← TAMBAH DATA DI SINI */
+];
+/* ───────────────────────────────────────────────────────────
+   ▲▲▲  AKHIR DATA SISWA  ▲▲▲
+─────────────────────────────────────────────────────────── */
+
+/* ── PAGE STATE ─────────────────────────────────────────── */
+let cur = 0;
+const pageCount = 3;
+const labels = ['Sambutan', 'Informasi Kelulusan', 'Cek Kelulusan'];
+
+function goTo(n, dir) {
+  if (n < 0 || n >= pageCount || n === cur) return;
+  const prev = document.getElementById('p' + cur);
+  const next = document.getElementById('p' + n);
+  const dots  = document.querySelectorAll('.dot');
+
+  prev.classList.remove('active');
+  prev.classList.add('exit-left');
+  setTimeout(() => prev.classList.remove('exit-left'), 450);
+
+  next.style.transform = 'translateX(40px)';
+  next.style.opacity = '0';
+  next.classList.add('active');
+  requestAnimationFrame(() => {
+    next.style.transition = 'opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1)';
+    next.style.transform = '';
+    next.style.opacity = '';
+  });
+
+  cur = n;
+  dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+
+  const btn   = document.getElementById('btnNext');
+  const label = document.getElementById('btnNextLabel');
+  if (cur >= pageCount - 1) {
+    btn.style.display = 'none';
+  } else {
+    btn.style.display = '';
+    label.textContent = labels[cur + 1];
+  }
+}
+
+function nextPage() { goTo(cur + 1); }
+
+/* ── GRADUATION CHECK ───────────────────────────────────── */
+function cekKelulusan() {
+  const nis   = document.getElementById('nisInput').value.trim();
+  const nama  = document.getElementById('namaInput').value.trim().toUpperCase();
+  const errBox = document.getElementById('errBox');
+  errBox.innerHTML = '';
+
+  if (!nis || !nama) {
+    errBox.innerHTML = buildErr('Harap isi NIS dan Nama Lengkap terlebih dahulu.');
+    return;
+  }
+
+  const siswa = DATA_SISWA.find(s => s.nis === nis && s.nama === nama);
+  if (siswa) {
+    showModal(siswa);
+    document.getElementById('nisInput').value = '';
+    document.getElementById('namaInput').value = '';
+  } else {
+    errBox.innerHTML = buildErr('Data tidak ditemukan. Pastikan NIS dan Nama Lengkap sesuai dengan data sekolah.');
+  }
+}
+
+function buildErr(msg) {
+  return `<div class="alert-err">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#f87171"/>
+    </svg>
+    <span>${msg}</span>
+  </div>`;
+}
+
+/* ── MODAL ──────────────────────────────────────────────── */
+function showModal(siswa) {
+  const info = document.getElementById('modalInfo');
+  info.innerHTML = `
+    <div class="modal-row">
+      <span class="modal-row-label">NIS</span>
+      <span class="modal-row-val">${siswa.nis}</span>
+    </div>
+    <div class="modal-row">
+      <span class="modal-row-label">Nama Lengkap</span>
+      <span class="modal-row-val">${siswa.nama}</span>
+    </div>
+    <div class="modal-row">
+      <span class="modal-row-label">Status</span>
+      <span class="modal-row-val" style="color:#6ee7a0;">✓ LULUS</span>
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+  spawnConfetti();
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal')) return;
+  document.getElementById('modal').classList.remove('open');
+}
+
+/* ── CONFETTI ───────────────────────────────────────────── */
+function spawnConfetti() {
+  const wrap = document.getElementById('confettiWrap');
+  wrap.innerHTML = '';
+  const cols = ['#c9a84c','#e8c96c','#f5e0a0','#6ee7a0','#7eb8f7','#f9a8d4'];
+  for (let i = 0; i < 60; i++) {
+    const cp = document.createElement('div');
+    cp.className = 'cp';
+    const x = Math.random() * 100;
+    const dx = (Math.random() - 0.5) * 80 + 'px';
+    cp.style.cssText = `left:${x}%;background:${cols[Math.floor(Math.random()*cols.length)]};
+      animation-delay:${Math.random()*0.8}s;animation-duration:${1.8+Math.random()*1.2}s;
+      --dx:${dx};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};`;
+    wrap.appendChild(cp);
+  }
+}
+
+/* ── SPLASH ─────────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('out');
+    document.getElementById('main').classList.add('visible');
+    document.getElementById('btnNextLabel').textContent = labels[1];
+  }, 2800);
+});
+
+/* ── ENTER KEY ──────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && cur === 2) cekKelulusan();
+});
+</script>
+</body>
+</html>
