@@ -223,11 +223,15 @@ body {
 .page.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
 .page.exit-left { opacity: 0; transform: translateX(-40px); }
 
-/* ─── NEXT BUTTON ───────────────────────────────────────── */
+/* ─── NEXT BUTTON - UBAH PERILAKU JADI DI BAWAH SCROLL ─── */
 .btn-next {
-  position: fixed; bottom: 32px; left: 50%;
+  /* Hapus position fixed, gunakan absolute terhadap page container */
+  position: absolute; 
+  bottom: 30px; /* Jarak dari bawah konten halaman p0 */
+  left: 50%;
   transform: translateX(-50%);
-  z-index: 50;
+  z-index: 10; /* Di bawah topbar tapi di atas konten */
+  
   width: 200px; height: 56px;
   background: linear-gradient(135deg, #c9a84c 0%, #e8c96c 50%, #c9a84c 100%);
   background-size: 200% 100%;
@@ -238,8 +242,29 @@ body {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4);
   transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
-  animation: btn-glow 3s ease-in-out infinite, fadeup 0.8s ease 1.2s both;
+  animation: btn-glow 3s ease-in-out infinite;
+  
+  /* Sembunyikan secara default, akan dimunculkan lewat JS */
+  opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(20px);
 }
+/* State muncul lewat JS class .show-btn */
+.btn-next.show-btn {
+  opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0);
+}
+
+.btn-next:hover {
+  transform: translateX(-50%) translateY(-4px) scale(1.03);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 16px 40px rgba(201,168,76,0.5), 0 4px 12px rgba(0,0,0,0.4);
+  background-position: 100% 0;
+}
+.btn-next:active { transform: translateX(-50%) translateY(-1px) scale(0.98); }
+.btn-next svg { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.3s ease; }
+.btn-next:hover svg { transform: translateX(4px); }
+.btn-next::after {
+  content: ''; position: absolute; inset: 0; border-radius: 100px;
+  background: rgba(255,255,255,0.15); opacity: 0; transform: scale(0.8);
+}
+.btn-next:active::after { animation: ripple 0.4s ease; }
 .btn-next:hover {
   transform: translateX(-50%) translateY(-4px) scale(1.03);
   box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 16px 40px rgba(201,168,76,0.5), 0 4px 12px rgba(0,0,0,0.4);
@@ -254,66 +279,92 @@ body {
 }
 .btn-next:active::after { animation: ripple 0.4s ease; }
 
-/* ─── PAGE CONTENT ──────────────────────────────────────── */
+/* ───────────────────────────────────────────────────────────
+   ▼▼▼  SECTION OVERWRITE: HIGHLIGHT KEPALA SEKOLAH  ▼▼▼
+─────────────────────────────────────────────────────────── */
+/* Container Halaman Sambutan agar tombol bisa diposisi relatif di bawah */
+#p0 { display: flex; flex-direction: column; }
+
+.principal-highlight-bg {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 150%; height: 400px;
+  background: radial-gradient(circle at center, rgba(201,168,76,0.15) 0%, rgba(8,16,31,0) 70%);
+  pointer-events: none; z-index: 0;
+}
+
 .principal-photo-wrap {
-  margin: 24px auto 0;
-  width: 110px; height: 110px; /* Ukuran container */
+  margin: 40px auto 0; /* Margin atas diperbesar */
+  width: 220px; height: 220px; /* UKURAN CONTAINER DIUBAH JADI BESAR */
   position: relative;
-  display: flex; align-items: center; justify-content: center; /* Memastikan foto di tengah */
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
 }
 
-/* Lingkaran dekorasi luar (solid) */
+/* Lingkaran dekorasi luar (solid) - disesuaikan ukuran besar */
 .principal-photo-wrap::before {
-  content: ''; position: absolute; inset: -6px;
-  border-radius: 50%; border: 1px solid rgba(201,168,76,0.4);
+  content: ''; position: absolute; inset: -10px;
+  border-radius: 50%; border: 2px solid rgba(201,168,76,0.5);
   z-index: 1; pointer-events: none;
+  box-shadow: 0 0 30px rgba(201,168,76,0.3);
 }
 
-/* Lingkaran dekorasi paling luar (putus-putus berputar) */
+/* Lingkaran dekorasi paling luar (putus-putus berputar) - disesuaikan ukuran besar */
 .principal-photo-wrap::after {
-  content: ''; position: absolute; inset: -12px;
-  border-radius: 50%; border: 1px dashed rgba(201,168,76,0.15);
-  animation: ring-spin 20s linear infinite;
+  content: ''; position: absolute; inset: -20px;
+  border-radius: 50%; border: 2px dashed rgba(201,168,76,0.2);
+  animation: ring-spin 25s linear infinite;
   z-index: 0; pointer-events: none;
 }
 
-/* FOTO KEPALA SEKOLAH */
+/* FOTO KEPALA SEKOLAH - DIUBAH JADI BESAR & HIGHLIGHT */
 .principal-photo {
-  /* Pastikan width dan height sama agar jadi kotak sempurna sebelum di-radius */
-  width: 110px; height: 110px; 
-  
-  /* Membuat jadi bulat */
+  width: 220px; height: 220px; /* UKURAN FOTO DIUBAH JADI BESAR */
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
   
-  /* PENTING: Agar foto tidak gepeng. Memotong gambar secara proporsional */
-  object-fit: cover; 
-  object-position: center; /* Fokus potongan di tengah */
+  /* Frame emas lebih tebal dan bercahaya */
+  border: 6px solid var(--gold);
   
-  /* Frame emas */
-  border: 3px solid var(--gold);
-  
-  /* Styling tambahan */
-  display: block; 
+  display: block;
   background: var(--navy3);
   position: relative;
-  z-index: 2; /* Di atas lingkaran dekorasi */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Bayangan halus agar timbul */
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4); /* Bayangan lebih dramatis */
+  animation: portrait-glow 4s ease-in-out infinite;
 }
 
+/* NAMA KEPALA SEKOLAH - HIGHLIGHT BESAR */
 .principal-name {
-  text-align: center; margin-top: 16px;
+  text-align: center; margin-top: 24px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 17px; font-weight: 600;
-  color: var(--gold2); letter-spacing: 0.01em;
+  font-size: 28px; font-weight: 700; /* Ukuran jauh lebih besar */
+  line-height: 1.1;
+  /* Efek Gradasi Teks Emas */
+  background: linear-gradient(135deg, var(--gold3), var(--gold), var(--gold2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: var(--gold); /* Fallback */
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 2; position: relative;
 }
+
+/* JABATAN KEPALA SEKOLAH - HIGHLIGHT */
 .principal-title {
-  text-align: center; font-size: 12px;
-  color: var(--muted); letter-spacing: 0.08em; margin-top: 4px;
+  text-align: center; font-size: 14px; font-weight: 600;
+  color: var(--gold3); /* Warna lebih terang dari muted */
+  letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px;
+  z-index: 2; position: relative;
+  opacity: 0.9;
 }
 
 .section-label {
   display: flex; align-items: center; gap: 12px;
-  margin: 28px 0 16px;
+  margin: 32px 0 16px;
+  z-index: 2; position: relative;
 }
 .section-label::before, .section-label::after {
   content: ''; flex: 1; height: 1px;
@@ -331,10 +382,11 @@ body {
   border-radius: var(--rb);
   padding: 24px 22px;
   backdrop-filter: blur(20px);
+  z-index: 2; position: relative;
 }
 .speech-card p {
   font-size: 14.5px; line-height: 1.85; color: var(--cream);
-  margin-bottom: 14px; text-align: justify; opacity: 0.88;
+  margin-bottom: 14px; text-align: justify; opacity: 0.9;
 }
 .speech-card p:last-child { margin-bottom: 0; }
 .speech-opener { font-style: italic; font-size: 14px; color: var(--gold3); opacity: 1 !important; }
@@ -356,6 +408,15 @@ body {
 .info-icon svg { width: 18px; height: 18px; stroke: var(--gold); }
 .info-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .info-val { font-size: 14px; font-weight: 500; color: var(--cream); margin-top: 3px; }
+
+/* Tambahan Animasi Glow untuk Foto */
+@keyframes portrait-glow {
+  0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4); border-color: #c9a84c; }
+  50% { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 35px rgba(232,201,108,0.6); border-color: #e8c96c; }
+}
+/* ───────────────────────────────────────────────────────────
+   ▲▲▲  AKHIR SECTION OVERWRITE  ▲▲▲
+─────────────────────────────────────────────────────────── */
 
 /* ─── FORM PAGE ──────────────────────────────────────────── */
 .form-hero { text-align: center; padding-top: 16px; margin-bottom: 28px; }
@@ -821,25 +882,34 @@ body {
     <div class="pages">
 
       <div class="page active" id="p0">
-        <div class="principal-photo-wrap" style="margin-top:20px;">
-          <img class="principal-photo" id="photo-p1"
-               src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png"
-               alt="Foto Kepala Sekolah"
-               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
+        <div class="principal-highlight-bg"></div>
+
+        <div class="principal-photo-wrap">
+          <img class="principal-photo" src="<a href="https://ibb.co.com/bnyVjq2"><img src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png" alt="Desain-tanpa-judul" border="0"></a>" alt="Foto Kepala Sekolah" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%22220%22%3E%3Crect fill=%22%23122040%22 width=%22220%22 height=%22220%22 rx=%22110%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2216%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
         </div>
         <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
-        <div class="principal-title">Kepala Sekolah</div>
+        <div class="principal-title">Kepala Sekolah SMP PGRI 3 Denpasar</div>
+        
         <div class="section-label"><span>Sambutan</span></div>
         <div class="speech-card">
           <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam sejahtera untuk kita semua,</p>
           <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.</p>
-          <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
+          <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunen, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
           <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan proses pendidikan dengan baik.</p>
           <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses pendidikan hingga pada tahap ini.</p>
           <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti bermimpi.</p>
           <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
           <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
         </div>
+
+        <div style="height: 120px; flex-shrink: 0;"></div> 
+
+        <button class="btn-next" id="btnNext0" onclick="nextPage()">
+          <span>Informasi Kelulusan</span>
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
+          </svg>
+        </button>
       </div>
 
       <div class="page" id="p1">
