@@ -25,12 +25,64 @@
 
 /* ─── RESET ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; height: 100%; overflow: hidden; }
+html { width: 100%; height: 100%; }
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--navy);
+  background: #020810;
   color: var(--cream);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* ─── APP WRAPPER (centered card) ───────────────────────── */
+#app-wrapper {
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.08);
+}
+
+/* Desktop sides decoration */
+@media (min-width: 480px) {
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    top: 0; bottom: 0;
+    width: calc((100vw - 480px) / 2);
+    background: #020810;
+    z-index: 0;
+  }
+  body::before { left: 0; }
+  body::after  { right: 0; }
+}
+
+/* ─── FLOATING SCHOOL ITEMS BACKGROUND ──────────────────── */
+.school-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.float-item {
+  position: absolute;
+  opacity: 0;
+  animation: floatItem var(--dur, 12s) ease-in-out var(--delay, 0s) infinite;
+}
+
+@keyframes floatItem {
+  0%   { opacity: 0;    transform: translateY(0px)   rotate(var(--r0, 0deg))  scale(1); }
+  15%  { opacity: var(--op, 0.12); }
+  50%  { opacity: var(--op, 0.12); transform: translateY(var(--dy, -28px)) rotate(var(--r1, 8deg))  scale(1.04); }
+  85%  { opacity: var(--op, 0.12); }
+  100% { opacity: 0;    transform: translateY(0px)   rotate(var(--r0, 0deg))  scale(1); }
 }
 
 /* ─── ORNAMENTATION ──────────────────────────────────────── */
@@ -39,16 +91,7 @@ body {
   filter: blur(80px); opacity: 0.18;
 }
 
-/* ─── WRAPPER ────────────────────────────────────────────── */
-#app {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  position: relative; overflow: hidden;
-}
-
-/* ══════════════════════════════════════════════════════════
-   SPLASH SCREEN
-══════════════════════════════════════════════════════════ */
+/* ─── SPLASH SCREEN ──────────────────────────────────────── */
 #splash {
   position: absolute; inset: 0; z-index: 100;
   background: var(--navy);
@@ -58,9 +101,7 @@ body {
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 #splash.out {
-  opacity: 0;
-  transform: scale(1.06);
-  pointer-events: none;
+  opacity: 0; transform: scale(1.06); pointer-events: none;
 }
 .splash-bg1 { width: 340px; height: 340px; background: #1a3a6e; top: -80px; right: -80px; }
 .splash-bg2 { width: 280px; height: 280px; background: #7a5a12; bottom: 60px; left: -60px; }
@@ -124,13 +165,12 @@ body {
 .splash-loader span:nth-child(2) { animation-delay: 0.2s; }
 .splash-loader span:nth-child(3) { animation-delay: 0.4s; }
 
-/* ══════════════════════════════════════════════════════════
-   MAIN APP
-══════════════════════════════════════════════════════════ */
+/* ─── MAIN APP ───────────────────────────────────────────── */
 #main {
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
   opacity: 0; transition: opacity 0.6s ease;
+  position: relative; z-index: 1;
 }
 #main.visible { opacity: 1; }
 
@@ -152,7 +192,7 @@ body {
   letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;
 }
 
-/* ─── STEP DOTS ────────────────────────────────────────── */
+/* ─── STEP DOTS ─────────────────────────────────────────── */
 .dots {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -170,10 +210,8 @@ body {
   box-shadow: 0 0 8px rgba(201,168,76,0.5);
 }
 
-/* ─── PAGES AREA ───────────────────────────────────────── */
-.pages {
-  flex: 1; overflow: hidden; position: relative;
-}
+/* ─── PAGES AREA ─────────────────────────────────────────── */
+.pages { flex: 1; overflow: hidden; position: relative; }
 .page {
   position: absolute; inset: 0;
   overflow-y: auto; overflow-x: hidden;
@@ -182,15 +220,10 @@ body {
   transform: translateX(40px);
   transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1);
 }
-.page.active {
-  opacity: 1; pointer-events: auto;
-  transform: translateX(0);
-}
-.page.exit-left {
-  opacity: 0; transform: translateX(-40px);
-}
+.page.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+.page.exit-left { opacity: 0; transform: translateX(-40px); }
 
-/* ─── NEXT BUTTON ──────────────────────────────────────── */
+/* ─── NEXT BUTTON ───────────────────────────────────────── */
 .btn-next {
   position: fixed; bottom: 32px; left: 50%;
   transform: translateX(-50%);
@@ -203,68 +236,43 @@ body {
   font-size: 14px; font-weight: 600; letter-spacing: 0.06em;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow:
-    0 0 0 1px rgba(201,168,76,0.3),
-    0 8px 24px rgba(201,168,76,0.35),
-    0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4);
   transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
   animation: btn-glow 3s ease-in-out infinite, fadeup 0.8s ease 1.2s both;
 }
 .btn-next:hover {
   transform: translateX(-50%) translateY(-4px) scale(1.03);
-  box-shadow:
-    0 0 0 1px rgba(201,168,76,0.5),
-    0 16px 40px rgba(201,168,76,0.5),
-    0 4px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 16px 40px rgba(201,168,76,0.5), 0 4px 12px rgba(0,0,0,0.4);
   background-position: 100% 0;
 }
-.btn-next:active {
-  transform: translateX(-50%) translateY(-1px) scale(0.98);
-}
-.btn-next svg {
-  width: 18px; height: 18px; flex-shrink: 0;
-  transition: transform 0.3s ease;
-}
+.btn-next:active { transform: translateX(-50%) translateY(-1px) scale(0.98); }
+.btn-next svg { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.3s ease; }
 .btn-next:hover svg { transform: translateX(4px); }
-
-/* Ripple */
 .btn-next::after {
-  content: '';
-  position: absolute; inset: 0; border-radius: 100px;
-  background: rgba(255,255,255,0.15);
-  opacity: 0; transform: scale(0.8);
+  content: ''; position: absolute; inset: 0; border-radius: 100px;
+  background: rgba(255,255,255,0.15); opacity: 0; transform: scale(0.8);
 }
-.btn-next:active::after {
-  animation: ripple 0.4s ease;
-}
+.btn-next:active::after { animation: ripple 0.4s ease; }
 
-/* ─── PAGE CONTENT COMPONENTS ──────────────────────────── */
-
-/* Photo */
+/* ─── PAGE CONTENT ──────────────────────────────────────── */
 .principal-photo-wrap {
   margin: 24px auto 0;
   width: 110px; height: 110px;
   position: relative;
 }
 .principal-photo-wrap::before {
-  content: '';
-  position: absolute; inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.4);
+  content: ''; position: absolute; inset: -6px;
+  border-radius: 50%; border: 1px solid rgba(201,168,76,0.4);
 }
 .principal-photo-wrap::after {
-  content: '';
-  position: absolute; inset: -12px;
-  border-radius: 50%;
-  border: 1px dashed rgba(201,168,76,0.15);
+  content: ''; position: absolute; inset: -12px;
+  border-radius: 50%; border: 1px dashed rgba(201,168,76,0.15);
   animation: ring-spin 20s linear infinite;
 }
 .principal-photo {
   width: 110px; height: 110px; border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--gold);
-  display: block;
-  background: var(--navy3);
+  object-fit: cover; border: 3px solid var(--gold);
+  display: block; background: var(--navy3);
 }
 .principal-name {
   text-align: center; margin-top: 16px;
@@ -274,29 +282,23 @@ body {
 }
 .principal-title {
   text-align: center; font-size: 12px;
-  color: var(--muted); letter-spacing: 0.08em;
-  margin-top: 4px;
+  color: var(--muted); letter-spacing: 0.08em; margin-top: 4px;
 }
 
-/* Section heading */
 .section-label {
   display: flex; align-items: center; gap: 12px;
   margin: 28px 0 16px;
 }
-.section-label::before,
-.section-label::after {
+.section-label::before, .section-label::after {
   content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border));
 }
-.section-label::after {
-  background: linear-gradient(90deg, var(--border), transparent);
-}
+.section-label::before { background: linear-gradient(90deg, transparent, var(--border)); }
+.section-label::after  { background: linear-gradient(90deg, var(--border), transparent); }
 .section-label span {
   font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--gold); white-space: nowrap;
 }
 
-/* Speech card */
 .speech-card {
   background: var(--glass);
   border: 1px solid var(--border);
@@ -306,16 +308,11 @@ body {
 }
 .speech-card p {
   font-size: 14.5px; line-height: 1.85; color: var(--cream);
-  margin-bottom: 14px; text-align: justify;
-  opacity: 0.88;
+  margin-bottom: 14px; text-align: justify; opacity: 0.88;
 }
 .speech-card p:last-child { margin-bottom: 0; }
-.speech-opener {
-  font-style: italic; font-size: 14px;
-  color: var(--gold3); opacity: 1 !important;
-}
+.speech-opener { font-style: italic; font-size: 14px; color: var(--gold3); opacity: 1 !important; }
 
-/* Info card */
 .info-card {
   background: var(--glass);
   border: 1px solid var(--border);
@@ -326,8 +323,7 @@ body {
 }
 .info-icon {
   width: 38px; height: 38px; flex-shrink: 0;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  border-radius: 10px; border: 1px solid var(--border);
   background: rgba(201,168,76,0.08);
   display: flex; align-items: center; justify-content: center;
 }
@@ -335,18 +331,13 @@ body {
 .info-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .info-val { font-size: 14px; font-weight: 500; color: var(--cream); margin-top: 3px; }
 
-/* ─── PAGE 3: FORM ─────────────────────────────────────── */
-.form-hero {
-  text-align: center; padding-top: 16px; margin-bottom: 28px;
-}
+/* ─── FORM PAGE ──────────────────────────────────────────── */
+.form-hero { text-align: center; padding-top: 16px; margin-bottom: 28px; }
 .form-hero-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 32px; font-weight: 700;
-  color: var(--gold2);
+  font-size: 32px; font-weight: 700; color: var(--gold2);
 }
-.form-hero-sub {
-  font-size: 13px; color: var(--muted); margin-top: 6px;
-}
+.form-hero-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 .input-group { margin-bottom: 18px; }
 .input-label {
@@ -360,9 +351,7 @@ body {
   border-radius: var(--r);
   color: var(--cream);
   font-family: 'DM Sans', sans-serif; font-size: 15px;
-  outline: none;
-  transition: all 0.3s ease;
-  -webkit-appearance: none;
+  outline: none; transition: all 0.3s ease; -webkit-appearance: none;
 }
 .input-field::placeholder { color: rgba(248,243,232,0.28); }
 .input-field:focus {
@@ -379,10 +368,9 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 15px; font-weight: 600;
   color: var(--navy); letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 6px;
+  cursor: pointer; transition: all 0.3s ease; margin-top: 6px;
   box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  position: relative; overflow: hidden;
 }
 .btn-check:hover {
   background-position: 100% 0;
@@ -390,96 +378,305 @@ body {
   transform: translateY(-2px);
 }
 .btn-check:active { transform: translateY(0); }
-.btn-check:disabled {
-  opacity: 0.5; cursor: not-allowed; transform: none;
+.btn-check:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+/* Loading dots on button */
+.btn-loading-dots {
+  display: inline-flex; gap: 4px; margin-left: 6px; vertical-align: middle;
 }
+.btn-loading-dots span {
+  width: 5px; height: 5px; background: var(--navy);
+  border-radius: 50%;
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+.btn-loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+.btn-loading-dots span:nth-child(3) { animation-delay: 0.3s; }
 
 .alert-err {
   margin-top: 14px; padding: 14px 16px;
   background: rgba(162,36,36,0.15);
   border: 1px solid rgba(240,80,80,0.3);
-  border-radius: var(--r);
-  font-size: 13px; color: #f8a0a0;
+  border-radius: var(--r); font-size: 13px; color: #f8a0a0;
   display: flex; align-items: flex-start; gap: 10px;
   animation: fadeup 0.3s ease;
 }
 .alert-err svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; stroke: #f87171; }
 
-/* ─── RESULT MODAL ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   DRAMATIC OVERLAY
+═══════════════════════════════════════════════════════════ */
+#drama-overlay {
+  position: fixed; inset: 0; z-index: 190;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, rgba(8,16,31,0.98) 70%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+#drama-overlay.show { opacity: 1; pointer-events: auto; }
+
+.drama-ring {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  animation: drama-pulse 0.8s ease-in-out infinite;
+}
+.drama-ring::before {
+  content: ''; position: absolute; inset: -12px;
+  border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
+  animation: ring-spin 2s linear infinite;
+}
+.drama-ring::after {
+  content: ''; position: absolute; inset: -24px;
+  border-radius: 50%; border: 1px dashed rgba(201,168,76,0.15);
+  animation: ring-spin 3s linear infinite reverse;
+}
+.drama-text {
+  margin-top: 32px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; color: var(--gold2);
+  letter-spacing: 0.25em; text-transform: uppercase;
+  animation: drama-text-pulse 0.8s ease-in-out infinite;
+}
+.drama-bar {
+  margin-top: 24px;
+  width: 200px; height: 3px;
+  background: rgba(201,168,76,0.2);
+  border-radius: 2px; overflow: hidden;
+}
+.drama-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  border-radius: 2px;
+  transition: width 2s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes drama-pulse {
+  0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(201,168,76,0.3); }
+  50%      { transform: scale(1.05); box-shadow: 0 0 50px rgba(201,168,76,0.6); }
+}
+@keyframes drama-text-pulse {
+  0%,100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN FLASH
+═══════════════════════════════════════════════════════════ */
+#flash-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: radial-gradient(ellipse at center, #fffbe0, #e8c96c 40%, transparent 70%);
+  opacity: 0; pointer-events: none;
+}
+#flash-overlay.flash {
+  animation: screen-flash 1.2s cubic-bezier(.2,0,.8,1) forwards;
+}
+@keyframes screen-flash {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  30%  { opacity: 0.8; }
+  60%  { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESULT MODAL — DRAMATIC VERSION
+═══════════════════════════════════════════════════════════ */
 #modal {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(8,16,31,0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(8,16,31,0.92);
+  backdrop-filter: blur(16px);
   display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; pointer-events: none;
   transition: opacity 0.4s ease;
 }
-#modal.open {
-  opacity: 1; pointer-events: auto;
-}
+#modal.open { opacity: 1; pointer-events: auto; }
+
 .modal-sheet {
   width: 100%; max-width: 480px;
-  background: linear-gradient(180deg, var(--navy2) 0%, #0a1525 100%);
+  background: linear-gradient(180deg, #0d1a30 0%, #08101f 100%);
   border-radius: 36px 36px 0 0;
-  border: 1px solid var(--border);
-  border-bottom: none;
-  padding: 16px 28px 50px;
+  border: 1px solid var(--border); border-bottom: none;
+  padding: 16px 28px 56px;
   text-align: center;
-  transform: translateY(60px);
-  transition: transform 0.5s cubic-bezier(.34,1.56,.64,1);
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(.34,1.56,.64,1);
   position: relative; overflow: hidden;
 }
-#modal.open .modal-sheet {
-  transform: translateY(0);
+#modal.open .modal-sheet { transform: translateY(0); }
+
+/* Sunburst rays behind trophy */
+.sunburst {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 300px; height: 300px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
 }
-.modal-sheet-bg1 { width: 240px; height: 240px; background: #c9a84c; top: -100px; right: -60px; filter: blur(120px); opacity: 0.15; }
-.modal-sheet-bg2 { width: 200px; height: 200px; background: #1a3a8a; bottom: -60px; left: -40px; filter: blur(100px); opacity: 0.2; }
+#modal.open .sunburst { opacity: 1; }
+
+.sunburst-inner {
+  position: absolute; inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 10deg,
+    rgba(201,168,76,0.07) 10deg 20deg,
+    transparent 20deg 30deg,
+    rgba(201,168,76,0.05) 30deg 40deg,
+    transparent 40deg 50deg,
+    rgba(201,168,76,0.08) 50deg 60deg,
+    transparent 60deg 70deg,
+    rgba(232,201,108,0.06) 70deg 80deg,
+    transparent 80deg 90deg,
+    rgba(201,168,76,0.07) 90deg 100deg,
+    transparent 100deg 110deg,
+    rgba(201,168,76,0.05) 110deg 120deg,
+    transparent 120deg 130deg,
+    rgba(201,168,76,0.08) 130deg 140deg,
+    transparent 140deg 150deg,
+    rgba(201,168,76,0.06) 150deg 160deg,
+    transparent 160deg 170deg,
+    rgba(201,168,76,0.07) 170deg 180deg,
+    transparent 180deg 190deg,
+    rgba(201,168,76,0.05) 190deg 200deg,
+    transparent 200deg 210deg,
+    rgba(201,168,76,0.08) 210deg 220deg,
+    transparent 220deg 230deg,
+    rgba(201,168,76,0.06) 230deg 240deg,
+    transparent 240deg 250deg,
+    rgba(201,168,76,0.07) 250deg 260deg,
+    transparent 260deg 270deg,
+    rgba(201,168,76,0.05) 270deg 280deg,
+    transparent 280deg 290deg,
+    rgba(201,168,76,0.08) 290deg 300deg,
+    transparent 300deg 310deg,
+    rgba(201,168,76,0.06) 310deg 320deg,
+    transparent 320deg 330deg,
+    rgba(201,168,76,0.07) 330deg 340deg,
+    transparent 340deg 350deg,
+    rgba(201,168,76,0.05) 350deg 360deg
+  );
+  border-radius: 50%;
+  animation: sunburst-spin 12s linear infinite;
+}
+@keyframes sunburst-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.modal-sheet-bg1 { width: 240px; height: 240px; background: #c9a84c; top: -100px; right: -60px; filter: blur(120px); opacity: 0.12; }
+.modal-sheet-bg2 { width: 200px; height: 200px; background: #1a3a8a; bottom: -60px; left: -40px; filter: blur(100px); opacity: 0.18; }
 
 .modal-handle {
   width: 44px; height: 4px; background: rgba(248,243,232,0.15);
-  border-radius: 2px; margin: 0 auto 28px;
+  border-radius: 2px; margin: 0 auto 20px;
+}
+
+/* Trophy dramatic */
+.modal-trophy-wrap {
+  position: relative; display: inline-block;
+  margin-bottom: 8px;
 }
 .modal-trophy {
-  font-size: 64px; margin-bottom: 12px;
-  animation: trophy-pop 0.8s cubic-bezier(.34,1.56,.64,1) 0.1s both;
-  display: block; line-height: 1;
+  font-size: 72px; display: block; line-height: 1;
+  opacity: 0;
+  transform: scale(0.3) translateY(30px) rotate(-20deg);
+  transition: opacity 0s, transform 0s;
+  filter: drop-shadow(0 0 30px rgba(201,168,76,0.8));
 }
+#modal.open .modal-trophy {
+  animation: trophy-dramatic 1s cubic-bezier(.34,1.56,.64,1) 0.2s both;
+}
+@keyframes trophy-dramatic {
+  0%   { opacity: 0; transform: scale(0.3) translateY(30px) rotate(-20deg); }
+  60%  { opacity: 1; transform: scale(1.2) translateY(-8px) rotate(5deg); }
+  80%  { transform: scale(0.95) translateY(2px) rotate(-2deg); }
+  100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+}
+
+/* Gold sparkles around trophy */
+.sparkle {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--gold2);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  opacity: 0;
+}
+#modal.open .sparkle { animation: sparkle-burst 0.8s ease-out var(--sd, 0.3s) both; }
+@keyframes sparkle-burst {
+  0%   { opacity: 0; transform: scale(0) translate(0,0); }
+  50%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5) translate(var(--sx,0),var(--sy,0)); }
+}
+
 .modal-congrats {
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px; font-weight: 400;
   color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
   margin-bottom: 6px;
+  opacity: 0;
+  transition: opacity 0s;
 }
+#modal.open .modal-congrats { animation: fadeup 0.6s ease 0.6s both; }
+
 .modal-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 34px; font-weight: 700;
-  color: var(--gold2); line-height: 1.15;
-  margin-bottom: 24px;
+  font-size: 36px; font-weight: 700;
+  line-height: 1.1; margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--gold3), var(--gold2), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
 }
+#modal.open .modal-title { animation: title-reveal 0.8s cubic-bezier(.34,1.56,.64,1) 0.7s both; }
+@keyframes title-reveal {
+  0%   { opacity: 0; transform: scale(0.85) translateY(20px); letter-spacing: -0.02em; }
+  100% { opacity: 1; transform: scale(1) translateY(0); letter-spacing: normal; }
+}
+
 .modal-divider {
-  width: 50px; height: 1px; margin: 0 auto 24px;
+  width: 50px; height: 1px; margin: 0 auto 20px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
 }
-.modal-row {
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(201,168,76,0.1);
-}
-.modal-row:last-of-type { border-bottom: none; }
-.modal-row-label {
-  font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--muted);
-}
-.modal-row-val {
-  font-size: 16px; font-weight: 600;
-  color: var(--gold2); text-align: right; max-width: 60%;
-}
+#modal.open .modal-divider { animation: fadeup 0.5s ease 0.9s both; }
+
 .modal-card {
   background: rgba(201,168,76,0.06);
   border: 1px solid var(--border);
   border-radius: 18px; padding: 4px 0 8px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
+  opacity: 0;
 }
+#modal.open .modal-card { animation: fadeup 0.6s ease 1s both; }
+
+.modal-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.modal-row:last-of-type { border-bottom: none; }
+.modal-row-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.modal-row-val { font-size: 15px; font-weight: 600; color: var(--gold2); text-align: right; max-width: 60%; }
+
+/* LULUS badge */
+.lulus-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, rgba(110,231,160,0.15), rgba(52,211,153,0.08));
+  border: 1px solid rgba(110,231,160,0.35);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px; font-weight: 700;
+  color: #6ee7a0;
+  letter-spacing: 0.08em;
+  animation: lulus-glow 2s ease-in-out infinite;
+}
+@keyframes lulus-glow {
+  0%,100% { box-shadow: 0 0 8px rgba(110,231,160,0.2); }
+  50%      { box-shadow: 0 0 24px rgba(110,231,160,0.5); }
+}
+
 .btn-close {
   width: 100%; padding: 15px;
   background: rgba(201,168,76,0.1);
@@ -487,25 +684,45 @@ body {
   border-radius: var(--r);
   color: var(--gold2); font-family: 'DM Sans', sans-serif;
   font-size: 14px; font-weight: 600; letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  cursor: pointer; transition: all 0.3s ease;
+  opacity: 0;
 }
+#modal.open .btn-close { animation: fadeup 0.5s ease 1.2s both; }
 .btn-close:hover { background: rgba(201,168,76,0.18); }
 
-/* Confetti particles */
+/* ─── CONFETTI CANVAS ───────────────────────────────────── */
+#confetti-canvas {
+  position: fixed; inset: 0; z-index: 250;
+  pointer-events: none;
+}
+
+/* Confetti sheet (existing, inside modal) */
 .confetti-wrap {
   position: absolute; inset: 0; pointer-events: none;
   border-radius: 36px 36px 0 0; overflow: hidden;
 }
 .cp {
   position: absolute; top: -10px;
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  animation: fall-c 2.5s ease-in forwards;
-  opacity: 0;
+  width: 8px; height: 8px; border-radius: 2px;
+  animation: fall-c 2.5s ease-in forwards; opacity: 0;
 }
 
-/* ─── ANIMATIONS ───────────────────────────────────────── */
+/* ─── FIREWORKS ─────────────────────────────────────────── */
+.firework {
+  position: fixed; pointer-events: none; z-index: 260;
+}
+.firework-particle {
+  position: absolute;
+  width: 4px; height: 4px; border-radius: 50%;
+  animation: fw-particle var(--dur,1s) ease-out var(--del,0s) forwards;
+  opacity: 0;
+}
+@keyframes fw-particle {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx,0),var(--ty,0)) scale(0.3); }
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
 @keyframes emblem-in {
   from { transform: scale(0.6) rotate(-20deg); opacity: 0; }
   to   { transform: scale(1) rotate(0deg); opacity: 1; }
@@ -526,13 +743,7 @@ body {
   0%, 100% { box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4); }
   50%       { box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 8px 36px rgba(201,168,76,0.55), 0 2px 6px rgba(0,0,0,0.4); }
 }
-@keyframes ripple {
-  to { opacity: 1; transform: scale(1.5); opacity: 0; }
-}
-@keyframes trophy-pop {
-  from { transform: scale(0.4) translateY(20px); opacity: 0; }
-  to   { transform: scale(1) translateY(0); opacity: 1; }
-}
+@keyframes ripple { to { opacity: 1; transform: scale(1.5); opacity: 0; } }
 @keyframes fall-c {
   0%   { top: -10px; opacity: 1; }
   100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(var(--dx)); }
@@ -546,197 +757,228 @@ body {
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     SPLASH SCREEN
-════════════════════════════════════════ -->
-<div id="splash">
-  <div class="orb splash-bg1"></div>
-  <div class="orb splash-bg2"></div>
+<!-- ═══════════════════════════════════════════
+     APP WRAPPER (centered)
+════════════════════════════════════════════ -->
+<div id="app-wrapper">
 
-  <div class="splash-emblem">
-    <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M26 4L30.5 16h12.5l-10 7.5 4 12.5L26 32l-11 8 4-12.5L9 20h12.5z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-      <circle cx="26" cy="26" r="10" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3 2"/>
-      <circle cx="26" cy="26" r="3" fill="#c9a84c"/>
-    </svg>
+  <!-- ─── FLOATING SCHOOL ITEMS BG ───────── -->
+  <div class="school-bg" id="schoolBg">
+    <!-- Generated by JS below -->
   </div>
 
-  <div class="splash-school">SMP PGRI 3<br>Denpasar</div>
-  <div class="splash-year">Tahun Pelajaran 2025 / 2026</div>
-  <div class="splash-divider"></div>
-  <div class="splash-tagline">Pengumuman Kelulusan Resmi</div>
-
-  <div class="splash-loader">
-    <span></span><span></span><span></span>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     MAIN APP
-════════════════════════════════════════ -->
-<div id="main">
-
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="topbar-school">SMP PGRI 3 Denpasar</div>
-    <div class="topbar-year">Tahun Pelajaran 2025 / 2026</div>
-  </div>
-
-  <!-- Dots -->
-  <div class="dots">
-    <div class="dot active" onclick="goTo(0)"></div>
-    <div class="dot" onclick="goTo(1)"></div>
-    <div class="dot" onclick="goTo(2)"></div>
+  <!-- ═══════════════════════════════════════
+       SPLASH SCREEN
+  ════════════════════════════════════════ -->
+  <div id="splash">
+    <div class="orb splash-bg1"></div>
+    <div class="orb splash-bg2"></div>
+    <div class="splash-emblem">
+      <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M26 4L30.5 16h12.5l-10 7.5 4 12.5L26 32l-11 8 4-12.5L9 20h12.5z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+        <circle cx="26" cy="26" r="10" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3 2"/>
+        <circle cx="26" cy="26" r="3" fill="#c9a84c"/>
+      </svg>
+    </div>
+    <div class="splash-school">SMP PGRI 3<br>Denpasar</div>
+    <div class="splash-year">Tahun Pelajaran 2025 / 2026</div>
+    <div class="splash-divider"></div>
+    <div class="splash-tagline">Pengumuman Kelulusan Resmi</div>
+    <div class="splash-loader"><span></span><span></span><span></span></div>
   </div>
 
-  <!-- Pages -->
-  <div class="pages">
+  <!-- ═══════════════════════════════════════
+       MAIN APP
+  ════════════════════════════════════════ -->
+  <div id="main">
 
-    <!-- ─── PAGE 1: SAMBUTAN ─────────────────── -->
-    <div class="page active" id="p0">
-      <div class="principal-photo-wrap" style="margin-top:20px;">
-        <!-- ▼ TEMPEL LINK FOTO KEPALA SEKOLAH DI SINI ▼ -->
-        <img class="principal-photo" id="photo-p1"
-             src="LINK FOTO KEPALA SEKOLAH"
-             alt="Foto Kepala Sekolah"
-             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
-      </div>
-      <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
-      <div class="principal-title">Kepala Sekolah</div>
-
-      <div class="section-label"><span>Sambutan</span></div>
-
-      <div class="speech-card">
-        <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam sejahtera untuk kita semua,</p>
-        <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.</p>
-        <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
-        <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan proses pendidikan dengan baik.</p>
-        <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses pendidikan hingga pada tahap ini.</p>
-        <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti bermimpi.</p>
-        <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
-        <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
-      </div>
+    <div class="topbar">
+      <div class="topbar-school">SMP PGRI 3 Denpasar</div>
+      <div class="topbar-year">Tahun Pelajaran 2025 / 2026</div>
     </div>
 
-    <!-- ─── PAGE 2: INFO KELULUSAN ──────────── -->
-    <div class="page" id="p1">
-      <div class="principal-photo-wrap" style="margin-top:20px;">
-        <!-- ▼ TEMPEL LINK FOTO KEPALA SEKOLAH DI SINI (halaman 2) ▼ -->
-        <img class="principal-photo" id="photo-p2"
-             src="LINK FOTO KEPALA SEKOLAH"
-             alt="Foto Kepala Sekolah"
-             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
-      </div>
-      <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
-      <div class="principal-title">Kepala Sekolah</div>
-
-      <div class="section-label"><span>Pengumuman Kelulusan</span></div>
-
-      <div class="info-card">
-        <div class="info-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </div>
-        <div>
-          <div class="info-label">Tanggal Pengumuman</div>
-          <div class="info-val">Rabu, 28 Mei 2026</div>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-          </svg>
-        </div>
-        <div>
-          <div class="info-label">Jenjang</div>
-          <div class="info-val">SMP PGRI 3 Denpasar — Kelas IX</div>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
-        </div>
-        <div>
-          <div class="info-label">Tahun Pelajaran</div>
-          <div class="info-val">2025 / 2026</div>
-        </div>
-      </div>
-
-      <div class="section-label"><span>Ketentuan</span></div>
-
-      <div class="speech-card">
-        <p>Peserta didik dinyatakan lulus apabila telah memenuhi seluruh persyaratan kelulusan sesuai ketentuan yang berlaku, termasuk penyelesaian seluruh program pembelajaran dan penilaian akhir jenjang.</p>
-        <p>Untuk memverifikasi kelulusan, silakan masukkan <strong style="color:var(--gold2);">NIS</strong> dan <strong style="color:var(--gold2);">Nama Lengkap</strong> sesuai data yang terdaftar di sekolah pada halaman selanjutnya.</p>
-        <p>Jika terdapat kekeliruan data atau pertanyaan lebih lanjut, harap menghubungi pihak sekolah secara langsung.</p>
-      </div>
+    <div class="dots">
+      <div class="dot active" onclick="goTo(0)"></div>
+      <div class="dot" onclick="goTo(1)"></div>
+      <div class="dot" onclick="goTo(2)"></div>
     </div>
 
-    <!-- ─── PAGE 3: CEK KELULUSAN ───────────── -->
-    <div class="page" id="p2">
-      <div class="form-hero">
-        <div class="form-hero-title">Cek Kelulusan</div>
-        <div class="form-hero-sub">Masukkan data sesuai absensi sekolah</div>
-      </div>
+    <div class="pages">
 
-      <div style="background:var(--glass); border:1px solid var(--border); border-radius:var(--rb); padding:28px 22px;">
-        <div class="input-group">
-          <label class="input-label" for="nisInput">NIS — Nomor Induk Siswa</label>
-          <input class="input-field" id="nisInput" type="text" inputmode="numeric" placeholder="Contoh: 12345" maxlength="10" autocomplete="off">
+      <!-- ─── PAGE 1: SAMBUTAN ─────────── -->
+      <div class="page active" id="p0">
+        <div class="principal-photo-wrap" style="margin-top:20px;">
+          <img class="principal-photo" id="photo-p1"
+               src="LINK_FOTO_KEPALA_SEKOLAH_DISINI"
+               alt="Foto Kepala Sekolah"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
         </div>
-        <div class="input-group">
-          <label class="input-label" for="namaInput">Nama Lengkap</label>
-          <input class="input-field" id="namaInput" type="text" placeholder="Contoh: ANDI WIJAYA" autocomplete="off"
-                 oninput="this.value=this.value.toUpperCase()">
+        <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+        <div class="principal-title">Kepala Sekolah</div>
+        <div class="section-label"><span>Sambutan</span></div>
+        <div class="speech-card">
+          <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam sejahtera untuk kita semua,</p>
+          <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.</p>
+          <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
+          <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan proses pendidikan dengan baik.</p>
+          <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses pendidikan hingga pada tahap ini.</p>
+          <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti bermimpi.</p>
+          <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
+          <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
         </div>
-        <div id="errBox"></div>
-        <button class="btn-check" onclick="cekKelulusan()">Periksa Kelulusan</button>
       </div>
 
-      <div style="text-align:center; margin-top:20px; font-size:12px; color:var(--muted); line-height:1.7;">
-        Jika data tidak ditemukan, pastikan penulisan<br>NIS dan nama sesuai dengan data sekolah.
+      <!-- ─── PAGE 2: INFO KELULUSAN ────── -->
+      <div class="page" id="p1">
+        <div class="principal-photo-wrap" style="margin-top:20px;">
+          <img class="principal-photo" id="photo-p2"
+               src="LINK_FOTO_KEPALA_SEKOLAH_DISINI"
+               alt="Foto Kepala Sekolah"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
+        </div>
+        <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+        <div class="principal-title">Kepala Sekolah</div>
+        <div class="section-label"><span>Pengumuman Kelulusan</span></div>
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Tanggal Pengumuman</div>
+            <div class="info-val">Rabu, 28 Mei 2026</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Jenjang</div>
+            <div class="info-val">SMP PGRI 3 Denpasar — Kelas IX</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Tahun Pelajaran</div>
+            <div class="info-val">2025 / 2026</div>
+          </div>
+        </div>
+        <div class="section-label"><span>Ketentuan</span></div>
+        <div class="speech-card">
+          <p>Peserta didik dinyatakan lulus apabila telah memenuhi seluruh persyaratan kelulusan sesuai ketentuan yang berlaku, termasuk penyelesaian seluruh program pembelajaran dan penilaian akhir jenjang.</p>
+          <p>Untuk memverifikasi kelulusan, silakan masukkan <strong style="color:var(--gold2);">NIS</strong> dan <strong style="color:var(--gold2);">Nama Lengkap</strong> sesuai data yang terdaftar di sekolah pada halaman selanjutnya.</p>
+          <p>Jika terdapat kekeliruan data atau pertanyaan lebih lanjut, harap menghubungi pihak sekolah secara langsung.</p>
+        </div>
       </div>
+
+      <!-- ─── PAGE 3: CEK KELULUSAN ──────── -->
+      <div class="page" id="p2">
+        <div class="form-hero">
+          <div class="form-hero-title">Cek Kelulusan</div>
+          <div class="form-hero-sub">Masukkan data sesuai absensi sekolah</div>
+        </div>
+        <div style="background:var(--glass); border:1px solid var(--border); border-radius:var(--rb); padding:28px 22px;">
+          <div class="input-group">
+            <label class="input-label" for="nisInput">NIS — Nomor Induk Siswa</label>
+            <input class="input-field" id="nisInput" type="text" inputmode="numeric" placeholder="Contoh: 12345" maxlength="10" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="namaInput">Nama Lengkap</label>
+            <input class="input-field" id="namaInput" type="text" placeholder="Contoh: ANDI WIJAYA" autocomplete="off"
+                   oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div id="errBox"></div>
+          <button class="btn-check" id="btnCheck" onclick="cekKelulusan()">Periksa Kelulusan</button>
+        </div>
+        <div style="text-align:center; margin-top:20px; font-size:12px; color:var(--muted); line-height:1.7;">
+          Jika data tidak ditemukan, pastikan penulisan<br>NIS dan nama sesuai dengan data sekolah.
+        </div>
+      </div>
+
+    </div><!-- /pages -->
+
+    <!-- Next Button -->
+    <button class="btn-next" id="btnNext" onclick="nextPage()">
+      <span id="btnNextLabel">Sambutan Kepala Sekolah</span>
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
+      </svg>
+    </button>
+
+  </div><!-- /main -->
+
+  <!-- ═══════════════════════════════════════
+       DRAMA OVERLAY
+  ════════════════════════════════════════ -->
+  <div id="drama-overlay">
+    <div class="drama-ring">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+        <path d="M30 8l4.5 13.5h14L36.8 30l4.5 13.5L30 36 19.7 43.5 24.2 30 12.5 21.5h14z"
+              stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+        <circle cx="30" cy="30" r="5" fill="#c9a84c" opacity="0.8"/>
+      </svg>
     </div>
-
-  </div><!-- /pages -->
-
-  <!-- Next Button -->
-  <button class="btn-next" id="btnNext" onclick="nextPage()">
-    <span id="btnNextLabel">Sambutan Kepala Sekolah</span>
-    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
-    </svg>
-  </button>
-
-</div><!-- /main -->
-
-<!-- ═══════════════════════════════════════
-     RESULT MODAL
-════════════════════════════════════════ -->
-<div id="modal" onclick="closeModal(event)">
-  <div class="modal-sheet" onclick="event.stopPropagation()">
-    <div class="orb modal-sheet-bg1"></div>
-    <div class="orb modal-sheet-bg2"></div>
-    <div class="confetti-wrap" id="confettiWrap"></div>
-
-    <div class="modal-handle"></div>
-    <span class="modal-trophy">🏆</span>
-    <div class="modal-congrats">Selamat!</div>
-    <div class="modal-title">Anda Telah<br>Dinyatakan Lulus</div>
-    <div class="modal-divider"></div>
-
-    <div class="modal-card" id="modalInfo">
-      <!-- rows inserted here -->
-    </div>
-
-    <button class="btn-close" onclick="closeModal()">Tutup</button>
+    <div class="drama-text" id="dramaText">Memeriksa data...</div>
+    <div class="drama-bar"><div class="drama-bar-fill" id="dramaBar"></div></div>
   </div>
-</div>
+
+  <!-- Flash overlay -->
+  <div id="flash-overlay"></div>
+
+  <!-- ═══════════════════════════════════════
+       RESULT MODAL
+  ════════════════════════════════════════ -->
+  <div id="modal" onclick="closeModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="orb modal-sheet-bg1"></div>
+      <div class="orb modal-sheet-bg2"></div>
+
+      <!-- Sunburst rays -->
+      <div class="sunburst"><div class="sunburst-inner"></div></div>
+
+      <!-- Confetti inside sheet -->
+      <div class="confetti-wrap" id="confettiWrap"></div>
+
+      <div class="modal-handle"></div>
+
+      <!-- Trophy with sparkles -->
+      <div class="modal-trophy-wrap">
+        <span class="modal-trophy">🏆</span>
+        <!-- Sparkles positioned around trophy -->
+        <div class="sparkle" style="top:5px;left:10px;--sd:0.4s;--sx:-25px;--sy:-20px;width:10px;height:10px;"></div>
+        <div class="sparkle" style="top:0px;right:10px;--sd:0.5s;--sx:25px;--sy:-25px;width:8px;height:8px;background:#e8c96c"></div>
+        <div class="sparkle" style="top:20px;left:0px;--sd:0.35s;--sx:-30px;--sy:-10px;width:7px;height:7px;background:#f5e0a0"></div>
+        <div class="sparkle" style="top:20px;right:0px;--sd:0.55s;--sx:30px;--sy:-5px;width:9px;height:9px;"></div>
+        <div class="sparkle" style="bottom:5px;left:15px;--sd:0.45s;--sx:-20px;--sy:20px;width:6px;height:6px;background:#6ee7a0"></div>
+        <div class="sparkle" style="bottom:5px;right:15px;--sd:0.6s;--sx:20px;--sy:20px;width:8px;height:8px;background:#7eb8f7"></div>
+        <div class="sparkle" style="top:10px;left:50%;--sd:0.3s;--sx:0px;--sy:-35px;width:7px;height:7px;background:#f9a8d4"></div>
+      </div>
+
+      <div class="modal-congrats">✦ Selamat! ✦</div>
+      <div class="modal-title" id="modalTitle">Anda Telah<br>Dinyatakan Lulus</div>
+      <div class="modal-divider"></div>
+
+      <div class="modal-card" id="modalInfo">
+        <!-- rows inserted here -->
+      </div>
+
+      <button class="btn-close" onclick="closeModalBtn()">✕ &nbsp; Tutup</button>
+    </div>
+  </div>
+
+</div><!-- /app-wrapper -->
+
+<!-- Confetti Canvas (full screen) -->
+<canvas id="confetti-canvas"></canvas>
 
 <!-- ═══════════════════════════════════════
      SCRIPT
@@ -744,8 +986,6 @@ body {
 <script>
 /* ───────────────────────────────────────────────────────────
    ▼▼▼  DATA SISWA  ▼▼▼
-   Format: { nis: 'NOMOR', nama: 'NAMA HURUF KAPITAL' }
-   Tambahkan atau ganti data di bawah ini sesuai daftar siswa.
 ─────────────────────────────────────────────────────────── */
 const DATA_SISWA = [
   { nis: '12345', nama: 'TESTER' },
@@ -760,12 +1000,111 @@ const DATA_SISWA = [
    ▲▲▲  AKHIR DATA SISWA  ▲▲▲
 ─────────────────────────────────────────────────────────── */
 
-/* ── PAGE STATE ─────────────────────────────────────────── */
+/* ── FLOATING SCHOOL ITEMS ──────────────────────────────── */
+const SCHOOL_SVGS = [
+  // Pencil
+  `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="7" y="4" width="22" height="6" rx="1" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <rect x="7" y="10" width="22" height="18" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <path d="M7 28 L18 34 L29 28" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <line x1="14" y1="10" x2="14" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <line x1="22" y1="10" x2="22" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+  </svg>`,
+  // Book
+  `<svg width="38" height="32" viewBox="0 0 38 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 4 Q3 2 5 2 H18 V30 H5 Q3 30 3 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <path d="M35 4 Q35 2 33 2 H20 V30 H33 Q35 30 35 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <line x1="18" y1="2" x2="20" y2="2" stroke="#c9a84c" stroke-width="1.5"/>
+    <line x1="18" y1="30" x2="20" y2="30" stroke="#c9a84c" stroke-width="1.5"/>
+    <line x1="7" y1="8" x2="16" y2="8" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <line x1="7" y1="12" x2="16" y2="12" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <line x1="7" y1="16" x2="16" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+  </svg>`,
+  // Ruler
+  `<svg width="44" height="18" viewBox="0 0 44 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="42" height="16" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <line x1="8"  y1="1" x2="8"  y2="8" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="15" y1="1" x2="15" y2="10" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="22" y1="1" x2="22" y2="8" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="29" y1="1" x2="29" y2="10" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="36" y1="1" x2="36" y2="8" stroke="#c9a84c" stroke-width="1"/>
+  </svg>`,
+  // Graduation cap
+  `<svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="20,2 38,11 20,20 2,11" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+    <path d="M10 16 V24 Q20 28 30 24 V16" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <line x1="38" y1="11" x2="38" y2="22" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="38" cy="23" r="2" stroke="#c9a84c" stroke-width="1" fill="none"/>
+  </svg>`,
+  // Pen / Ballpen
+  `<svg width="10" height="44" viewBox="0 0 10 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="6" height="30" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <path d="M2 32 L5 42 L8 32" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <rect x="1" y="4" width="8" height="4" stroke="#c9a84c" stroke-width="0.8" opacity="0.4" fill="none"/>
+  </svg>`,
+  // Star (gold star grade)
+  `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="16,2 19.5,12 30,12 21.5,18.5 25,29 16,22.5 7,29 10.5,18.5 2,12 12.5,12"
+             stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+  </svg>`,
+  // Paper / document
+  `<svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2 H18 L26 10 V34 Q26 35 25 35 H3 Q2 35 2 34 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <path d="M18 2 V10 H26" stroke="#c9a84c" stroke-width="1" fill="none"/>
+    <line x1="7" y1="16" x2="21" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <line x1="7" y1="21" x2="21" y2="21" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <line x1="7" y1="26" x2="16" y2="26" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+  </svg>`,
+  // Compass (math compass)
+  `<svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="16" cy="8" r="5" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+    <line x1="13" y1="12" x2="4" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="19" y1="12" x2="28" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="9" y1="24" x2="23" y2="24" stroke="#c9a84c" stroke-width="0.8" stroke-dasharray="2 2"/>
+  </svg>`,
+];
+
+function initFloatingItems() {
+  const bg = document.getElementById('schoolBg');
+  const items = [
+    { svg: 0, x: 5,  y: 8,  dur: 14, del: 0,   op: 0.09, r0: '-15deg', r1: '10deg',  dy: '-25px' },
+    { svg: 1, x: 75, y: 5,  dur: 16, del: 2,   op: 0.08, r0: '10deg',  r1: '-8deg',  dy: '-30px' },
+    { svg: 2, x: 55, y: 15, dur: 18, del: 4,   op: 0.07, r0: '-8deg',  r1: '12deg',  dy: '-20px' },
+    { svg: 3, x: 8,  y: 35, dur: 12, del: 1,   op: 0.10, r0: '20deg',  r1: '-5deg',  dy: '-35px' },
+    { svg: 4, x: 85, y: 30, dur: 15, del: 3,   op: 0.09, r0: '-12deg', r1: '18deg',  dy: '-28px' },
+    { svg: 5, x: 30, y: 60, dur: 20, del: 6,   op: 0.08, r0: '5deg',   r1: '-10deg', dy: '-22px' },
+    { svg: 6, x: 70, y: 55, dur: 13, del: 0.5, op: 0.09, r0: '-18deg', r1: '8deg',   dy: '-32px' },
+    { svg: 7, x: 15, y: 70, dur: 17, del: 5,   op: 0.07, r0: '15deg',  r1: '-12deg', dy: '-18px' },
+    { svg: 0, x: 80, y: 75, dur: 14, del: 7,   op: 0.08, r0: '-5deg',  r1: '15deg',  dy: '-24px' },
+    { svg: 1, x: 45, y: 82, dur: 19, del: 2.5, op: 0.07, r0: '8deg',   r1: '-15deg', dy: '-28px' },
+    { svg: 3, x: 55, y: 42, dur: 11, del: 8,   op: 0.08, r0: '-20deg', r1: '5deg',   dy: '-20px' },
+    { svg: 5, x: 20, y: 88, dur: 16, del: 3.5, op: 0.09, r0: '12deg',  r1: '-8deg',  dy: '-26px' },
+  ];
+
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'float-item';
+    div.style.cssText = `
+      left: ${item.x}%;
+      top: ${item.y}%;
+      --dur: ${item.dur}s;
+      --delay: ${item.del}s;
+      --op: ${item.op};
+      --r0: ${item.r0};
+      --r1: ${item.r1};
+      --dy: ${item.dy};
+    `;
+    div.innerHTML = SCHOOL_SVGS[item.svg];
+    bg.appendChild(div);
+  });
+}
+
+/* ── PAGE STATE ──────────────────────────────────────────── */
 let cur = 0;
 const pageCount = 3;
 const labels = ['Sambutan', 'Informasi Kelulusan', 'Cek Kelulusan'];
 
-function goTo(n, dir) {
+function goTo(n) {
   if (n < 0 || n >= pageCount || n === cur) return;
   const prev = document.getElementById('p' + cur);
   const next = document.getElementById('p' + n);
@@ -796,14 +1135,230 @@ function goTo(n, dir) {
     label.textContent = labels[cur + 1];
   }
 }
-
 function nextPage() { goTo(cur + 1); }
 
-/* ── GRADUATION CHECK ───────────────────────────────────── */
-function cekKelulusan() {
-  const nis   = document.getElementById('nisInput').value.trim();
-  const nama  = document.getElementById('namaInput').value.trim().toUpperCase();
+/* ── HELPERS ──────────────────────────────────────────────── */
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── SOUND ENGINE (Web Audio API) ───────────────────────── */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playTone(freq, startTime, duration, vol = 0.3, type = 'sine') {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, startTime);
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.1);
+}
+
+function playSuspenseSound() {
+  try {
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    // Low pulse that builds up
+    [80, 85, 90, 95, 100].forEach((freq, i) => {
+      playTone(freq, now + i * 0.3, 0.5, 0.15, 'sawtooth');
+    });
+    // High tension note
+    playTone(440, now + 1.6, 0.8, 0.05, 'sine');
+  } catch(e) {}
+}
+
+function playVictoryFanfare() {
+  try {
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    // Fanfare: ascending triumphant tones
+    const notes = [
+      { f: 523.25, t: 0,    d: 0.15, v: 0.4 }, // C5
+      { f: 523.25, t: 0.12, d: 0.15, v: 0.4 }, // C5
+      { f: 523.25, t: 0.24, d: 0.15, v: 0.4 }, // C5
+      { f: 415.30, t: 0.24, d: 0.15, v: 0.2 }, // Ab4 (harmony)
+      { f: 659.25, t: 0.38, d: 0.55, v: 0.45 }, // E5
+      { f: 523.25, t: 0.38, d: 0.55, v: 0.2 },  // C5 (low harmony)
+      { f: 587.33, t: 0.95, d: 0.18, v: 0.4 }, // D5
+      { f: 659.25, t: 1.15, d: 0.18, v: 0.45 }, // E5
+      { f: 783.99, t: 1.35, d: 0.8,  v: 0.5, type: 'triangle' }, // G5 — peak!
+      { f: 659.25, t: 1.35, d: 0.8,  v: 0.2 }, // E5 (harmony)
+      { f: 523.25, t: 1.35, d: 0.8,  v: 0.15 }, // C5 (harmony)
+      // Chord landing
+      { f: 1046.5, t: 2.15, d: 1.2, v: 0.3 }, // C6
+      { f:  783.99, t: 2.15, d: 1.2, v: 0.25 }, // G5
+      { f:  659.25, t: 2.15, d: 1.2, v: 0.2 },  // E5
+      { f:  523.25, t: 2.15, d: 1.2, v: 0.2 },  // C5
+    ];
+    notes.forEach(n => playTone(n.f, now + n.t, n.d, n.v, n.type || 'sine'));
+    // Bell-like sparkle
+    [2093, 2637, 3136].forEach((f, i) => {
+      playTone(f, now + 2.15 + i * 0.08, 0.8, 0.08, 'sine');
+    });
+  } catch(e) {}
+}
+
+/* ── CANVAS CONFETTI ─────────────────────────────────────── */
+let confettiParticles = [];
+let confettiRunning = false;
+let confettiCanvas, confettiCtx;
+
+function initConfettiCanvas() {
+  confettiCanvas = document.getElementById('confetti-canvas');
+  confettiCtx = confettiCanvas.getContext('2d');
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+
+function launchConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+  confettiParticles = [];
+  confettiRunning = true;
+
+  const colors = ['#c9a84c','#e8c96c','#f5e0a0','#6ee7a0','#7eb8f7','#f9a8d4','#fbbf24','#34d399','#60a5fa','#f472b6','#fff'];
+  const cx = window.innerWidth / 2;
+
+  // Burst from center-ish + multiple launch points
+  const launchPoints = [
+    { x: cx, y: window.innerHeight * 0.6 },
+    { x: cx * 0.3, y: window.innerHeight * 0.8 },
+    { x: cx * 1.7, y: window.innerHeight * 0.8 },
+    { x: cx * 0.6, y: window.innerHeight },
+    { x: cx * 1.4, y: window.innerHeight },
+  ];
+
+  launchPoints.forEach((lp, li) => {
+    const count = li === 0 ? 120 : 60;
+    const delay = li * 180;
+    setTimeout(() => {
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i / count) - Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+        const speed = 6 + Math.random() * 14;
+        confettiParticles.push({
+          x: lp.x, y: lp.y,
+          vx: Math.cos(angle) * speed * (0.5 + Math.random() * 0.5),
+          vy: Math.sin(angle) * speed - (li === 0 ? 8 : 4),
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: 5 + Math.random() * 8,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.3,
+          shape: Math.random() > 0.5 ? 'rect' : 'circle',
+          alpha: 1,
+          gravity: 0.25 + Math.random() * 0.15,
+          life: 1,
+        });
+      }
+    }, delay);
+  });
+
+  confettiRunning = true;
+  requestAnimationFrame(animateConfetti);
+
+  // Auto-stop after 5s
+  setTimeout(() => { confettiRunning = false; }, 5000);
+}
+
+function animateConfetti() {
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+  confettiParticles = confettiParticles.filter(p => p.alpha > 0.01);
+
+  confettiParticles.forEach(p => {
+    p.vy += p.gravity;
+    p.vx *= 0.99;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rotation += p.rotSpeed;
+    if (p.y > confettiCanvas.height * 0.7) p.alpha -= 0.012;
+
+    confettiCtx.save();
+    confettiCtx.globalAlpha = p.alpha;
+    confettiCtx.translate(p.x, p.y);
+    confettiCtx.rotate(p.rotation);
+    confettiCtx.fillStyle = p.color;
+    if (p.shape === 'rect') {
+      confettiCtx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+    } else {
+      confettiCtx.beginPath();
+      confettiCtx.arc(0, 0, p.size/2, 0, Math.PI*2);
+      confettiCtx.fill();
+    }
+    confettiCtx.restore();
+  });
+
+  if (confettiRunning || confettiParticles.length > 0) {
+    requestAnimationFrame(animateConfetti);
+  } else {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  }
+}
+
+/* ── FIREWORKS ────────────────────────────────────────────── */
+function launchFireworks() {
+  const colors = ['#c9a84c','#e8c96c','#6ee7a0','#7eb8f7','#f9a8d4','#fbbf24'];
+  const wrapper = document.getElementById('app-wrapper');
+  const rect = wrapper.getBoundingClientRect();
+  
+  const positions = [
+    { x: rect.left + rect.width * 0.25, y: rect.top + rect.height * 0.35 },
+    { x: rect.left + rect.width * 0.75, y: rect.top + rect.height * 0.30 },
+    { x: rect.left + rect.width * 0.50, y: rect.top + rect.height * 0.20 },
+    { x: rect.left + rect.width * 0.15, y: rect.top + rect.height * 0.55 },
+    { x: rect.left + rect.width * 0.85, y: rect.top + rect.height * 0.50 },
+  ];
+
+  positions.forEach((pos, i) => {
+    setTimeout(() => {
+      const fw = document.createElement('div');
+      fw.className = 'firework';
+      fw.style.cssText = `left:${pos.x}px; top:${pos.y}px;`;
+
+      const particleCount = 24;
+      for (let j = 0; j < particleCount; j++) {
+        const angle = (Math.PI * 2 * j / particleCount);
+        const distance = 50 + Math.random() * 60;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = 3 + Math.random() * 4;
+        p.style.cssText = `
+          background:${color};
+          width:${size}px; height:${size}px;
+          border-radius:50%;
+          --tx:${tx}px; --ty:${ty}px;
+          --dur:${0.7 + Math.random() * 0.5}s;
+          --del:0s;
+          left:0; top:0;
+          margin-left:-${size/2}px; margin-top:-${size/2}px;
+        `;
+        fw.appendChild(p);
+      }
+
+      document.body.appendChild(fw);
+      setTimeout(() => fw.remove(), 1500);
+    }, i * 250 + 300);
+  });
+}
+
+/* ── GRADUATION CHECK ────────────────────────────────────── */
+async function cekKelulusan() {
+  const nis    = document.getElementById('nisInput').value.trim();
+  const nama   = document.getElementById('namaInput').value.trim().toUpperCase();
   const errBox = document.getElementById('errBox');
+  const btn    = document.getElementById('btnCheck');
   errBox.innerHTML = '';
 
   if (!nis || !nama) {
@@ -812,13 +1367,60 @@ function cekKelulusan() {
   }
 
   const siswa = DATA_SISWA.find(s => s.nis === nis && s.nama === nama);
-  if (siswa) {
-    showModal(siswa);
-    document.getElementById('nisInput').value = '';
-    document.getElementById('namaInput').value = '';
-  } else {
+
+  if (!siswa) {
     errBox.innerHTML = buildErr('Data tidak ditemukan. Pastikan NIS dan Nama Lengkap sesuai dengan data sekolah.');
+    return;
   }
+
+  // ── DRAMATIC SEQUENCE ──
+  btn.disabled = true;
+  btn.innerHTML = `Memeriksa<span class="btn-loading-dots"><span></span><span></span><span></span></span>`;
+
+  // Show drama overlay
+  const overlay   = document.getElementById('drama-overlay');
+  const dramaText = document.getElementById('dramaText');
+  const dramaBar  = document.getElementById('dramaBar');
+  overlay.classList.add('show');
+
+  playSuspenseSound();
+
+  // Animate bar
+  await sleep(100);
+  dramaBar.style.width = '100%';
+
+  // Dramatic text sequence
+  await sleep(700);
+  dramaText.textContent = 'Memverifikasi identitas...';
+  await sleep(700);
+  dramaText.textContent = 'Data ditemukan!';
+  await sleep(500);
+  dramaText.textContent = '✦ Mengumumkan hasil... ✦';
+  await sleep(600);
+
+  // FLASH + FANFARE
+  overlay.classList.remove('show');
+  await sleep(100);
+
+  const flash = document.getElementById('flash-overlay');
+  flash.classList.add('flash');
+
+  playVictoryFanfare();
+  launchFireworks();
+
+  await sleep(400);
+  showModal(siswa);
+  await sleep(200);
+  launchConfetti();
+
+  // Reset button
+  btn.disabled = false;
+  btn.innerHTML = 'Periksa Kelulusan';
+  document.getElementById('nisInput').value = '';
+  document.getElementById('namaInput').value = '';
+
+  // Remove flash class after animation
+  setTimeout(() => flash.classList.remove('flash'), 1500);
 }
 
 function buildErr(msg) {
@@ -830,7 +1432,7 @@ function buildErr(msg) {
   </div>`;
 }
 
-/* ── MODAL ──────────────────────────────────────────────── */
+/* ── MODAL ───────────────────────────────────────────────── */
 function showModal(siswa) {
   const info = document.getElementById('modalInfo');
   info.innerHTML = `
@@ -844,37 +1446,52 @@ function showModal(siswa) {
     </div>
     <div class="modal-row">
       <span class="modal-row-label">Status</span>
-      <span class="modal-row-val" style="color:#6ee7a0;">✓ LULUS</span>
+      <span class="modal-row-val">
+        <span class="lulus-badge">★ &nbsp;LULUS</span>
+      </span>
+    </div>
+    <div class="modal-row">
+      <span class="modal-row-label">Tahun Pelajaran</span>
+      <span class="modal-row-val">2025 / 2026</span>
     </div>`;
+
   document.getElementById('modal').classList.add('open');
-  spawnConfetti();
+  spawnSheetConfetti();
 }
 
 function closeModal(e) {
   if (e && e.target !== document.getElementById('modal')) return;
   document.getElementById('modal').classList.remove('open');
+  confettiRunning = false;
+}
+function closeModalBtn() {
+  document.getElementById('modal').classList.remove('open');
+  confettiRunning = false;
 }
 
-/* ── CONFETTI ───────────────────────────────────────────── */
-function spawnConfetti() {
+/* ── SHEET CONFETTI (inside modal) ──────────────────────── */
+function spawnSheetConfetti() {
   const wrap = document.getElementById('confettiWrap');
   wrap.innerHTML = '';
   const cols = ['#c9a84c','#e8c96c','#f5e0a0','#6ee7a0','#7eb8f7','#f9a8d4'];
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 80; i++) {
     const cp = document.createElement('div');
     cp.className = 'cp';
-    const x = Math.random() * 100;
-    const dx = (Math.random() - 0.5) * 80 + 'px';
+    const x  = Math.random() * 100;
+    const dx = (Math.random() - 0.5) * 100 + 'px';
     cp.style.cssText = `left:${x}%;background:${cols[Math.floor(Math.random()*cols.length)]};
-      animation-delay:${Math.random()*0.8}s;animation-duration:${1.8+Math.random()*1.2}s;
-      --dx:${dx};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;
+      animation-delay:${Math.random()*0.6}s;animation-duration:${1.8+Math.random()*1.4}s;
+      --dx:${dx};width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;
       border-radius:${Math.random()>0.5?'50%':'2px'};`;
     wrap.appendChild(cp);
   }
 }
 
-/* ── SPLASH ─────────────────────────────────────────────── */
+/* ── SPLASH ──────────────────────────────────────────────── */
 window.addEventListener('load', () => {
+  initFloatingItems();
+  initConfettiCanvas();
+
   setTimeout(() => {
     document.getElementById('splash').classList.add('out');
     document.getElementById('main').classList.add('visible');
@@ -882,7 +1499,7 @@ window.addEventListener('load', () => {
   }, 2800);
 });
 
-/* ── ENTER KEY ──────────────────────────────────────────── */
+/* ── ENTER KEY ───────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && cur === 2) cekKelulusan();
 });
