@@ -1,1518 +1,2315 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Cek Kelulusan — SMP PGRI 3 Denpasar</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-/* ─── TOKENS ─────────────────────────────────────────────── */
-:root {
-  --navy:    #08101f;
-  --navy2:   #0d1a30;
-  --navy3:   #122040;
-  --gold:    #c9a84c;
-  --gold2:   #e8c96c;
-  --gold3:   #f5e0a0;
-  --cream:   #f8f3e8;
-  --muted:   rgba(248,243,232,0.55);
-  --border:  rgba(201,168,76,0.22);
-  --glass:   rgba(255,255,255,0.04);
-  --r:       16px;
-  --rb:      28px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Cek Kelulusan — SMP PGRI 3 Denpasar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ─── TOKENS ─────────────────────────────────────────────── */
+        :root {
+            --navy: #08101f;
+            --navy2: #0d1a30;
+            --navy3: #122040;
+            --gold: #c9a84c;
+            --gold2: #e8c96c;
+            --gold3: #f5e0a0;
+            --cream: #f8f3e8;
+            --muted: rgba(248, 243, 232, 0.55);
+            --border: rgba(201, 168, 76, 0.22);
+            --glass: rgba(255, 255, 255, 0.04);
+            --r: 16px;
+            --rb: 28px;
+        }
 
-/* ─── RESET ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { width: 100%; height: 100%; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: #020810;
-  color: var(--cream);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow: hidden;
-}
+        /* ─── RESET ──────────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* ─── APP WRAPPER (centered card) ───────────────────────── */
-#app-wrapper {
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
-  position: relative;
-  background: var(--navy);
-  overflow: hidden;
-  box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.08);
-}
+        html {
+            width: 100%;
+            height: 100%;
+        }
 
-@media (min-width: 480px) {
-  body::before, body::after {
-    content: '';
-    position: fixed;
-    top: 0; bottom: 0;
-    width: calc((100vw - 480px) / 2);
-    background: #020810;
-    z-index: 0;
-  }
-  body::before { left: 0; }
-  body::after  { right: 0; }
-}
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #020810;
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+        }
 
-/* ─── FLOATING SCHOOL ITEMS BACKGROUND ──────────────────── */
-.school-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.float-item {
-  position: absolute;
-  opacity: 0;
-  animation: floatItem var(--dur, 12s) ease-in-out var(--delay, 0s) infinite;
-}
+        /* ─── APP WRAPPER (centered card) ───────────────────────── */
+        #app-wrapper {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            position: relative;
+            background: var(--navy);
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(201, 168, 76, 0.08);
+        }
 
-@keyframes floatItem {
-  0%   { opacity: 0;    transform: translateY(0px)    rotate(var(--r0, 0deg))  scale(1); }
-  15%  { opacity: var(--op, 0.12); }
-  50%  { opacity: var(--op, 0.12); transform: translateY(var(--dy, -28px)) rotate(var(--r1, 8deg))  scale(1.04); }
-  85%  { opacity: var(--op, 0.12); }
-  100% { opacity: 0;    transform: translateY(0px)    rotate(var(--r0, 0deg))  scale(1); }
-}
+        @media (min-width: 480px) {
 
-.orb {
-  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-  filter: blur(80px); opacity: 0.18;
-}
+            body::before,
+            body::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: calc((100vw - 480px) / 2);
+                background: #020810;
+                z-index: 0;
+            }
 
-/* ─── SPLASH SCREEN ──────────────────────────────────────── */
-#splash {
-  position: absolute; inset: 0; z-index: 100;
-  background: var(--navy);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 0;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-#splash.out {
-  opacity: 0; transform: scale(1.06); pointer-events: none;
-}
-.splash-bg1 { width: 340px; height: 340px; background: #1a3a6e; top: -80px; right: -80px; }
-.splash-bg2 { width: 280px; height: 280px; background: #7a5a12; bottom: 60px; left: -60px; }
+            body::before {
+                left: 0;
+            }
 
-.splash-emblem {
-  width: 100px; height: 100px; margin-bottom: 32px;
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; z-index: 2;
-  animation: emblem-in 1s cubic-bezier(.34,1.56,.64,1) both;
-}
-.splash-emblem::before {
-  content: '';
-  position: absolute; inset: -8px;
-  border: 1px solid rgba(201,168,76,0.25);
-  border-radius: 50%;
-  animation: ring-spin 8s linear infinite;
-}
-.splash-emblem svg { width: 52px; height: 52px; }
+            body::after {
+                right: 0;
+            }
+        }
 
-.splash-school {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px; font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--gold2);
-  text-align: center; line-height: 1.15;
-  position: relative; z-index: 2;
-  animation: fadeup 1s ease 0.3s both;
-}
-.splash-year {
-  font-size: 13px; font-weight: 400;
-  color: var(--muted);
-  letter-spacing: 0.18em; text-transform: uppercase;
-  margin-top: 8px; margin-bottom: 40px;
-  position: relative; z-index: 2;
-  animation: fadeup 1s ease 0.5s both;
-}
-.splash-divider {
-  width: 60px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin-bottom: 40px; position: relative; z-index: 2;
-  animation: fadeup 1s ease 0.7s both;
-}
-.splash-tagline {
-  font-size: 14px; font-weight: 300;
-  color: var(--muted); letter-spacing: 0.08em;
-  position: relative; z-index: 2;
-  animation: fadeup 1s ease 0.9s both;
-}
-.splash-loader {
-  position: absolute; bottom: 60px; left: 50%;
-  transform: translateX(-50%);
-  display: flex; gap: 6px; z-index: 2;
-}
-.splash-loader span {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--gold);
-  animation: pulse-dot 1.4s ease-in-out infinite;
-}
-.splash-loader span:nth-child(2) { animation-delay: 0.2s; }
-.splash-loader span:nth-child(3) { animation-delay: 0.4s; }
+        /* ─── FLOATING SCHOOL ITEMS BACKGROUND ──────────────────── */
+        .school-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
 
-/* ─── MAIN APP ───────────────────────────────────────────── */
-#main {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  opacity: 0; transition: opacity 0.6s ease;
-  position: relative; z-index: 1;
-}
-#main.visible { opacity: 1; }
+        .float-item {
+            position: absolute;
+            opacity: 0;
+            animation: floatItem var(--dur, 12s) ease-in-out var(--delay, 0s) infinite;
+        }
 
-.topbar {
-  flex-shrink: 0;
-  padding: 18px 20px 14px;
-  display: flex; flex-direction: column; align-items: center;
-  background: linear-gradient(180deg, var(--navy) 0%, transparent 100%);
-  position: relative; z-index: 10;
-}
-.topbar-school {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px; font-weight: 600;
-  color: var(--gold2); letter-spacing: 0.03em;
-}
-.topbar-year {
-  font-size: 11px; color: var(--muted);
-  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;
-}
+        @keyframes floatItem {
+            0% {
+                opacity: 0;
+                transform: translateY(0px) rotate(var(--r0, 0deg)) scale(1);
+            }
 
-.dots {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 10px 0 6px;
-}
-.dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(201,168,76,0.25);
-  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
-  cursor: pointer;
-}
-.dot.active {
-  background: var(--gold);
-  width: 24px; border-radius: 3px;
-  box-shadow: 0 0 8px rgba(201,168,76,0.5);
-}
+            15% {
+                opacity: var(--op, 0.12);
+            }
 
-.pages { flex: 1; overflow: hidden; position: relative; }
-.page {
-  position: absolute; inset: 0;
-  overflow-y: auto; overflow-x: hidden;
-  padding: 0 20px 40px; /* Padding bawah diperkecil karena tombol masuk ke flow */
-  opacity: 0; pointer-events: none;
-  transform: translateX(40px);
-  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1);
-  display: flex; flex-direction: column;
-}
-.page.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
-.page.exit-left { opacity: 0; transform: translateX(-40px); }
+            50% {
+                opacity: var(--op, 0.12);
+                transform: translateY(var(--dy, -28px)) rotate(var(--r1, 8deg)) scale(1.04);
+            }
 
-/* ─── NEXT BUTTON - MUNCUL DI BAWAH SETELAH SCROLL ─── */
-.btn-next {
-  position: relative; 
-  margin: 40px auto 20px; /* Menggunakan margin agar tidak menabrak teks */
-  width: 200px; height: 56px;
-  background: linear-gradient(135deg, #c9a84c 0%, #e8c96c 50%, #c9a84c 100%);
-  background-size: 200% 100%;
-  border: none; border-radius: 100px;
-  color: var(--navy); font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 600; letter-spacing: 0.06em;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4);
-  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
-  animation: btn-glow 3s ease-in-out infinite;
-  
-  /* Disembunyikan dulu */
-  opacity: 0; pointer-events: none; transform: translateY(20px);
-  flex-shrink: 0;
-}
-/* Class ini dipanggil JS saat user scroll ke bawah */
-.btn-next.show-btn {
-  opacity: 1; pointer-events: auto; transform: translateY(0);
-}
+            85% {
+                opacity: var(--op, 0.12);
+            }
 
-.btn-next:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 16px 40px rgba(201,168,76,0.5), 0 4px 12px rgba(0,0,0,0.4);
-  background-position: 100% 0;
-}
-.btn-next:active { transform: translateY(-1px) scale(0.98); }
-.btn-next svg { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.3s ease; }
-.btn-next:hover svg { transform: translateX(4px); }
-.btn-next::after {
-  content: ''; position: absolute; inset: 0; border-radius: 100px;
-  background: rgba(255,255,255,0.15); opacity: 0; transform: scale(0.8);
-}
-.btn-next:active::after { animation: ripple 0.4s ease; }
+            100% {
+                opacity: 0;
+                transform: translateY(0px) rotate(var(--r0, 0deg)) scale(1);
+            }
+        }
 
-/* ─── HIGHLIGHT KEPALA SEKOLAH ──────────────────────────────── */
-.principal-highlight-bg {
-  position: absolute;
-  top: 0; left: 50%; transform: translateX(-50%);
-  width: 150%; height: 400px;
-  background: radial-gradient(circle at center, rgba(201,168,76,0.15) 0%, rgba(8,16,31,0) 70%);
-  pointer-events: none; z-index: 0;
-}
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.18;
+        }
 
-.principal-photo-wrap {
-  margin: 80px auto 0; /* DIUBAH: Jarak atas ditambah jadi 80px agar tidak menabrak teks sekolah */
-  width: 220px; height: 220px; 
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2; flex-shrink: 0;
-}
+        /* ─── SPLASH SCREEN ──────────────────────────────────────── */
+        #splash {
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+            background: var(--navy);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
 
-.principal-photo-wrap::before {
-  content: ''; position: absolute; inset: -10px;
-  border-radius: 50%; border: 2px solid rgba(201,168,76,0.5);
-  z-index: 1; pointer-events: none;
-  box-shadow: 0 0 30px rgba(201,168,76,0.3);
-}
+        #splash.out {
+            opacity: 0;
+            transform: scale(1.06);
+            pointer-events: none;
+        }
 
-.principal-photo-wrap::after {
-  content: ''; position: absolute; inset: -20px;
-  border-radius: 50%; border: 2px dashed rgba(201,168,76,0.2);
-  animation: ring-spin 25s linear infinite;
-  z-index: 0; pointer-events: none;
-}
+        .splash-bg1 {
+            width: 340px;
+            height: 340px;
+            background: #1a3a6e;
+            top: -80px;
+            right: -80px;
+        }
 
-.principal-photo {
-  width: 220px; height: 220px; 
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center 15%; /* DIUBAH: Fokus gambar diturunkan ke 15% dari atas agar kepala utuh */
-  border: 6px solid var(--gold);
-  display: block;
-  background: var(--navy3);
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4); 
-  animation: portrait-glow 4s ease-in-out infinite;
-}
+        .splash-bg2 {
+            width: 280px;
+            height: 280px;
+            background: #7a5a12;
+            bottom: 60px;
+            left: -60px;
+        }
 
-.principal-name {
-  text-align: center; margin-top: 24px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 25px; font-weight: 700; 
-  line-height: 1.1;
-  background: linear-gradient(135deg, var(--gold3), var(--gold), var(--gold2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: var(--gold); 
-  letter-spacing: -0.01em;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  z-index: 2; position: relative;
-}
+        .splash-emblem {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 32px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            animation: emblem-in 1s cubic-bezier(.34, 1.56, .64, 1) both;
+        }
 
-.principal-title {
-  text-align: center; font-size: 14px; font-weight: 600;
-  color: var(--gold3); 
-  letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px;
-  z-index: 2; position: relative;
-  opacity: 0.9;
-}
+        .splash-emblem::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 50%;
+            animation: ring-spin 8s linear infinite;
+        }
 
-.section-label {
-  display: flex; align-items: center; gap: 12px;
-  margin: 32px 0 16px;
-  z-index: 2; position: relative;
-}
-.section-label::before, .section-label::after {
-  content: ''; flex: 1; height: 1px;
-}
-.section-label::before { background: linear-gradient(90deg, transparent, var(--border)); }
-.section-label::after  { background: linear-gradient(90deg, var(--border), transparent); }
-.section-label span {
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--gold); white-space: nowrap;
-}
+        .splash-emblem svg {
+            width: 52px;
+            height: 52px;
+        }
 
-.speech-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--rb);
-  padding: 24px 22px;
-  backdrop-filter: blur(20px);
-  z-index: 2; position: relative;
-}
-.speech-card p {
-  font-size: 14.5px; line-height: 1.85; color: var(--cream);
-  margin-bottom: 14px; text-align: justify; opacity: 0.9;
-}
-.speech-card p:last-child { margin-bottom: 0; }
-.speech-opener { font-style: italic; font-size: 14px; color: var(--gold3); opacity: 1 !important; }
+        .splash-school {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--gold2);
+            text-align: center;
+            line-height: 1.15;
+            position: relative;
+            z-index: 2;
+            animation: fadeup 1s ease 0.3s both;
+        }
 
-/* Photo Info styling untuk page 2 */
-.photo-info-wrap {
-  margin: 20px auto 0; 
-  width: 110px; height: 110px; 
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2; flex-shrink: 0;
-}
-.photo-info-wrap::before {
-  content: ''; position: absolute; inset: -6px;
-  border-radius: 50%; border: 1px solid rgba(201,168,76,0.4);
-  z-index: 1; pointer-events: none;
-}
-.photo-info-wrap::after {
-  content: ''; position: absolute; inset: -12px;
-  border-radius: 50%; border: 1px dashed rgba(201,168,76,0.15);
-  animation: ring-spin 20s linear infinite;
-  z-index: 0; pointer-events: none;
-}
-.photo-info {
-  width: 110px; height: 110px; 
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  border: 3px solid var(--gold);
-  display: block; background: var(--navy3);
-  position: relative; z-index: 2;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.name-info {
-  text-align: center; margin-top: 16px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px; font-weight: 600;
-  color: var(--gold2); letter-spacing: 0.01em;
-}
-.title-info {
-  text-align: center; font-size: 12px;
-  color: var(--muted); letter-spacing: 0.08em; margin-top: 4px;
-}
+        .splash-year {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--muted);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-top: 8px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+            animation: fadeup 1s ease 0.5s both;
+        }
 
-.info-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 18px;
-  display: flex; align-items: flex-start; gap: 14px;
-  margin-bottom: 12px;
-}
-.info-icon {
-  width: 38px; height: 38px; flex-shrink: 0;
-  border-radius: 10px; border: 1px solid var(--border);
-  background: rgba(201,168,76,0.08);
-  display: flex; align-items: center; justify-content: center;
-}
-.info-icon svg { width: 18px; height: 18px; stroke: var(--gold); }
-.info-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.info-val { font-size: 14px; font-weight: 500; color: var(--cream); margin-top: 3px; }
+        .splash-divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+            animation: fadeup 1s ease 0.7s both;
+        }
 
-@keyframes portrait-glow {
-  0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4); border-color: #c9a84c; }
-  50% { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 35px rgba(232,201,108,0.6); border-color: #e8c96c; }
-}
+        .splash-tagline {
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            position: relative;
+            z-index: 2;
+            animation: fadeup 1s ease 0.9s both;
+        }
 
-/* ─── FORM PAGE ──────────────────────────────────────────── */
-.form-hero { text-align: center; padding-top: 16px; margin-bottom: 28px; }
-.form-hero-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 32px; font-weight: 700; color: var(--gold2);
-}
-.form-hero-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+        .splash-loader {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 2;
+        }
 
-.input-group { margin-bottom: 18px; }
-.input-label {
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--gold); display: block; margin-bottom: 8px; font-weight: 600;
-}
-.input-field {
-  width: 100%; padding: 15px 18px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  color: var(--cream);
-  font-family: 'DM Sans', sans-serif; font-size: 15px;
-  outline: none; transition: all 0.3s ease; -webkit-appearance: none;
-}
-.input-field::placeholder { color: rgba(248,243,232,0.28); }
-.input-field:focus {
-  border-color: var(--gold);
-  background: rgba(201,168,76,0.06);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-}
+        .splash-loader span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse-dot 1.4s ease-in-out infinite;
+        }
 
-.btn-check {
-  width: 100%; padding: 16px;
-  background: linear-gradient(135deg, #c9a84c, #e8c96c, #c9a84c);
-  background-size: 200% 100%;
-  border: none; border-radius: var(--r);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px; font-weight: 600;
-  color: var(--navy); letter-spacing: 0.04em;
-  cursor: pointer; transition: all 0.3s ease; margin-top: 6px;
-  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
-  position: relative; overflow: hidden;
-}
-.btn-check:hover {
-  background-position: 100% 0;
-  box-shadow: 0 12px 32px rgba(201,168,76,0.45);
-  transform: translateY(-2px);
-}
-.btn-check:active { transform: translateY(0); }
-.btn-check:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .splash-loader span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
 
-.btn-loading-dots { display: inline-flex; gap: 4px; margin-left: 6px; vertical-align: middle; }
-.btn-loading-dots span {
-  width: 5px; height: 5px; background: var(--navy);
-  border-radius: 50%;
-  animation: pulse-dot 1.2s ease-in-out infinite;
-}
-.btn-loading-dots span:nth-child(2) { animation-delay: 0.15s; }
-.btn-loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+        .splash-loader span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
 
-.alert-err {
-  margin-top: 14px; padding: 14px 16px;
-  background: rgba(162,36,36,0.15);
-  border: 1px solid rgba(240,80,80,0.3);
-  border-radius: var(--r); font-size: 13px; color: #f8a0a0;
-  display: flex; align-items: flex-start; gap: 10px;
-  animation: fadeup 0.3s ease;
-}
-.alert-err svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; stroke: #f87171; }
+        /* ─── MAIN APP ───────────────────────────────────────────── */
+        #main {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            position: relative;
+            z-index: 1;
+        }
 
-/* ═══════════════════════════════════════════════════════════
+        #main.visible {
+            opacity: 1;
+        }
+
+        .topbar {
+            flex-shrink: 0;
+            /* Jarak atas (padding) diperbesar jadi 45px agar aman dari notch/kamera HP dan URL bar */
+            padding: 45px 20px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, var(--navy) 0%, transparent 100%);
+            position: relative;
+            z-index: 10;
+        }
+
+        .topbar-school {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--gold2);
+            letter-spacing: 0.03em;
+        }
+
+        .topbar-year {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .dots {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 0 6px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.25);
+            transition: all 0.4s cubic-bezier(.34, 1.56, .64, 1);
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: var(--gold);
+            width: 24px;
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(201, 168, 76, 0.5);
+        }
+
+        .pages {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 20px 40px;
+            /* Padding bawah diperkecil karena tombol masuk ke flow */
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(40px);
+            transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.25, .8, .25, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .page.exit-left {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        /* ─── NEXT BUTTON - MUNCUL DI BAWAH SETELAH SCROLL ─── */
+        .btn-next {
+            position: relative;
+            margin: 40px auto 20px;
+            /* Menggunakan margin agar tidak menabrak teks */
+            width: 200px;
+            height: 56px;
+            background: linear-gradient(135deg, #c9a84c 0%, #e8c96c 50%, #c9a84c 100%);
+            background-size: 200% 100%;
+            border: none;
+            border-radius: 100px;
+            color: var(--navy);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.3), 0 8px 24px rgba(201, 168, 76, 0.35), 0 2px 6px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(.34, 1.56, .64, 1);
+            animation: btn-glow 3s ease-in-out infinite;
+
+            /* Disembunyikan dulu */
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            flex-shrink: 0;
+        }
+
+        /* Class ini dipanggil JS saat user scroll ke bawah */
+        .btn-next.show-btn {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.5), 0 16px 40px rgba(201, 168, 76, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
+            background-position: 100% 0;
+        }
+
+        .btn-next:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-next svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-next:hover svg {
+            transform: translateX(4px);
+        }
+
+        .btn-next::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.15);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .btn-next:active::after {
+            animation: ripple 0.4s ease;
+        }
+
+        /* ─── HIGHLIGHT KEPALA SEKOLAH ──────────────────────────────── */
+        .principal-highlight-bg {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(201, 168, 76, 0.15) 0%, rgba(8, 16, 31, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .principal-photo-wrap {
+            margin: 80px auto 0;
+            /* DIUBAH: Jarak atas ditambah jadi 80px agar tidak menabrak teks sekolah */
+            width: 220px;
+            height: 220px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .principal-photo-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            border: 2px solid rgba(201, 168, 76, 0.5);
+            z-index: 1;
+            pointer-events: none;
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.3);
+        }
+
+        .principal-photo-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            border: 2px dashed rgba(201, 168, 76, 0.2);
+            animation: ring-spin 25s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .principal-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 15%;
+            /* DIUBAH: Fokus gambar diturunkan ke 15% dari atas agar kepala utuh */
+            border: 6px solid var(--gold);
+            display: block;
+            background: var(--navy3);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 168, 76, 0.4);
+            animation: portrait-glow 4s ease-in-out infinite;
+        }
+
+        .principal-name {
+            text-align: center;
+            margin-top: 24px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 25px;
+            font-weight: 700;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--gold3), var(--gold), var(--gold2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: var(--gold);
+            letter-spacing: -0.01em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            position: relative;
+        }
+
+        .principal-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gold3);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 8px;
+            z-index: 2;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 32px 0 16px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+        }
+
+        .section-label::before {
+            background: linear-gradient(90deg, transparent, var(--border));
+        }
+
+        .section-label::after {
+            background: linear-gradient(90deg, var(--border), transparent);
+        }
+
+        .section-label span {
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            white-space: nowrap;
+        }
+
+        .speech-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--rb);
+            padding: 24px 22px;
+            backdrop-filter: blur(20px);
+            z-index: 2;
+            position: relative;
+        }
+
+        .speech-card p {
+            font-size: 14.5px;
+            line-height: 1.85;
+            color: var(--cream);
+            margin-bottom: 14px;
+            text-align: justify;
+            opacity: 0.9;
+        }
+
+        .speech-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .speech-opener {
+            font-style: italic;
+            font-size: 14px;
+            color: var(--gold3);
+            opacity: 1 !important;
+        }
+
+        /* Photo Info styling untuk page 2 */
+        .photo-info-wrap {
+            margin: 20px auto 0;
+            width: 110px;
+            height: 110px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .photo-info-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 168, 76, 0.4);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .photo-info-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 1px dashed rgba(201, 168, 76, 0.15);
+            animation: ring-spin 20s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .photo-info {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 3px solid var(--gold);
+            display: block;
+            background: var(--navy3);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .name-info {
+            text-align: center;
+            margin-top: 16px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--gold2);
+            letter-spacing: 0.01em;
+        }
+
+        .title-info {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        .info-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .info-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(201, 168, 76, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gold);
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .info-val {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--cream);
+            margin-top: 3px;
+        }
+
+        @keyframes portrait-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 168, 76, 0.4);
+                border-color: #c9a84c;
+            }
+
+            50% {
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(232, 201, 108, 0.6);
+                border-color: #e8c96c;
+            }
+        }
+
+        /* ─── FORM PAGE ──────────────────────────────────────────── */
+        .form-hero {
+            text-align: center;
+            padding-top: 16px;
+            margin-bottom: 28px;
+        }
+
+        .form-hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold2);
+        }
+
+        .form-hero-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-label {
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            color: var(--cream);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+        }
+
+        .input-field::placeholder {
+            color: rgba(248, 243, 232, 0.28);
+        }
+
+        .input-field:focus {
+            border-color: var(--gold);
+            background: rgba(201, 168, 76, 0.06);
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+        }
+
+        .btn-check {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #c9a84c, #e8c96c, #c9a84c);
+            background-size: 200% 100%;
+            border: none;
+            border-radius: var(--r);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-check:hover {
+            background-position: 100% 0;
+            box-shadow: 0 12px 32px rgba(201, 168, 76, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-check:active {
+            transform: translateY(0);
+        }
+
+        .btn-check:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loading-dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .btn-loading-dots span {
+            width: 5px;
+            height: 5px;
+            background: var(--navy);
+            border-radius: 50%;
+            animation: pulse-dot 1.2s ease-in-out infinite;
+        }
+
+        .btn-loading-dots span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .btn-loading-dots span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .alert-err {
+            margin-top: 14px;
+            padding: 14px 16px;
+            background: rgba(162, 36, 36, 0.15);
+            border: 1px solid rgba(240, 80, 80, 0.3);
+            border-radius: var(--r);
+            font-size: 13px;
+            color: #f8a0a0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            animation: fadeup 0.3s ease;
+        }
+
+        .alert-err svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            stroke: #f87171;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
    DRAMATIC OVERLAY
 ═══════════════════════════════════════════════════════════ */
-#drama-overlay {
-  position: fixed; inset: 0; z-index: 190;
-  background: radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, rgba(8,16,31,0.98) 70%);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-#drama-overlay.show { opacity: 1; pointer-events: auto; }
+        #drama-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 190;
+            background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.15) 0%, rgba(8, 16, 31, 0.98) 70%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
 
-.drama-ring {
-  width: 140px; height: 140px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-  animation: drama-pulse 0.8s ease-in-out infinite;
-}
-.drama-ring::before {
-  content: ''; position: absolute; inset: -12px;
-  border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
-  animation: ring-spin 2s linear infinite;
-}
-.drama-ring::after {
-  content: ''; position: absolute; inset: -24px;
-  border-radius: 50%; border: 1px dashed rgba(201,168,76,0.15);
-  animation: ring-spin 3s linear infinite reverse;
-}
-.drama-text {
-  margin-top: 32px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px; color: var(--gold2);
-  letter-spacing: 0.25em; text-transform: uppercase;
-  animation: drama-text-pulse 0.8s ease-in-out infinite;
-}
-.drama-bar {
-  margin-top: 24px;
-  width: 200px; height: 3px;
-  background: rgba(201,168,76,0.2);
-  border-radius: 2px; overflow: hidden;
-}
-.drama-bar-fill {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, var(--gold), var(--gold2));
-  border-radius: 2px;
-  transition: width 2s cubic-bezier(.4,0,.2,1);
-}
+        #drama-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-@keyframes drama-pulse {
-  0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(201,168,76,0.3); }
-  50%      { transform: scale(1.05); box-shadow: 0 0 50px rgba(201,168,76,0.6); }
-}
-@keyframes drama-text-pulse {
-  0%,100% { opacity: 0.7; }
-  50%      { opacity: 1; }
-}
+        .drama-ring {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: drama-pulse 0.8s ease-in-out infinite;
+        }
 
-/* ═══════════════════════════════════════════════════════════
+        .drama-ring::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            animation: ring-spin 2s linear infinite;
+        }
+
+        .drama-ring::after {
+            content: '';
+            position: absolute;
+            inset: -24px;
+            border-radius: 50%;
+            border: 1px dashed rgba(201, 168, 76, 0.15);
+            animation: ring-spin 3s linear infinite reverse;
+        }
+
+        .drama-text {
+            margin-top: 32px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: var(--gold2);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            animation: drama-text-pulse 0.8s ease-in-out infinite;
+        }
+
+        .drama-bar {
+            margin-top: 24px;
+            width: 200px;
+            height: 3px;
+            background: rgba(201, 168, 76, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .drama-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold), var(--gold2));
+            border-radius: 2px;
+            transition: width 2s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        @keyframes drama-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 50px rgba(201, 168, 76, 0.6);
+            }
+        }
+
+        @keyframes drama-text-pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
    SCREEN FLASH
 ═══════════════════════════════════════════════════════════ */
-#flash-overlay {
-  position: fixed; inset: 0; z-index: 300;
-  background: radial-gradient(ellipse at center, #fffbe0, #e8c96c 40%, transparent 70%);
-  opacity: 0; pointer-events: none;
-}
-#flash-overlay.flash {
-  animation: screen-flash 1.2s cubic-bezier(.2,0,.8,1) forwards;
-}
-@keyframes screen-flash {
-  0%   { opacity: 0; }
-  10%  { opacity: 1; }
-  30%  { opacity: 0.8; }
-  60%  { opacity: 0.3; }
-  100% { opacity: 0; }
-}
+        #flash-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: radial-gradient(ellipse at center, #fffbe0, #e8c96c 40%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-/* ═══════════════════════════════════════════════════════════
+        #flash-overlay.flash {
+            animation: screen-flash 1.2s cubic-bezier(.2, 0, .8, 1) forwards;
+        }
+
+        @keyframes screen-flash {
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            30% {
+                opacity: 0.8;
+            }
+
+            60% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
    RESULT MODAL
 ═══════════════════════════════════════════════════════════ */
-#modal {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(8,16,31,0.92);
-  backdrop-filter: blur(16px);
-  display: flex; align-items: flex-end; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-#modal.open { opacity: 1; pointer-events: auto; }
+        #modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(8, 16, 31, 0.92);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
 
-.modal-sheet {
-  width: 100%; max-width: 480px;
-  background: linear-gradient(180deg, #0d1a30 0%, #08101f 100%);
-  border-radius: 36px 36px 0 0;
-  border: 1px solid var(--border); border-bottom: none;
-  padding: 16px 28px 56px;
-  text-align: center;
-  transform: translateY(100%);
-  transition: transform 0.6s cubic-bezier(.34,1.56,.64,1);
-  position: relative; overflow: hidden;
-}
-#modal.open .modal-sheet { transform: translateY(0); }
+        #modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-.sunburst {
-  position: absolute;
-  top: 0; left: 50%; transform: translateX(-50%);
-  width: 300px; height: 300px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease 0.3s;
-}
-#modal.open .sunburst { opacity: 1; }
+        .modal-sheet {
+            width: 100%;
+            max-width: 480px;
+            background: linear-gradient(180deg, #0d1a30 0%, #08101f 100%);
+            border-radius: 36px 36px 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            padding: 16px 28px 56px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(.34, 1.56, .64, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-.sunburst-inner {
-  position: absolute; inset: 0;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 10deg,
-    rgba(201,168,76,0.07) 10deg 20deg,
-    transparent 20deg 30deg,
-    rgba(201,168,76,0.05) 30deg 40deg,
-    transparent 40deg 50deg,
-    rgba(201,168,76,0.08) 50deg 60deg,
-    transparent 60deg 70deg,
-    rgba(232,201,108,0.06) 70deg 80deg,
-    transparent 80deg 90deg,
-    rgba(201,168,76,0.07) 90deg 100deg,
-    transparent 100deg 110deg,
-    rgba(201,168,76,0.05) 110deg 120deg,
-    transparent 120deg 130deg,
-    rgba(201,168,76,0.08) 130deg 140deg,
-    transparent 140deg 150deg,
-    rgba(201,168,76,0.06) 150deg 160deg,
-    transparent 160deg 170deg,
-    rgba(201,168,76,0.07) 170deg 180deg,
-    transparent 180deg 190deg,
-    rgba(201,168,76,0.05) 190deg 200deg,
-    transparent 200deg 210deg,
-    rgba(201,168,76,0.08) 210deg 220deg,
-    transparent 220deg 230deg,
-    rgba(201,168,76,0.06) 230deg 240deg,
-    transparent 240deg 250deg,
-    rgba(201,168,76,0.07) 250deg 260deg,
-    transparent 260deg 270deg,
-    rgba(201,168,76,0.05) 270deg 280deg,
-    transparent 280deg 290deg,
-    rgba(201,168,76,0.08) 290deg 300deg,
-    transparent 300deg 310deg,
-    rgba(201,168,76,0.06) 310deg 320deg,
-    transparent 320deg 330deg,
-    rgba(201,168,76,0.07) 330deg 340deg,
-    transparent 340deg 350deg,
-    rgba(201,168,76,0.05) 350deg 360deg
-  );
-  border-radius: 50%;
-  animation: sunburst-spin 12s linear infinite;
-}
-@keyframes sunburst-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #modal.open .modal-sheet {
+            transform: translateY(0);
+        }
 
-.modal-sheet-bg1 { width: 240px; height: 240px; background: #c9a84c; top: -100px; right: -60px; filter: blur(120px); opacity: 0.12; }
-.modal-sheet-bg2 { width: 200px; height: 200px; background: #1a3a8a; bottom: -60px; left: -40px; filter: blur(100px); opacity: 0.18; }
-.modal-handle { width: 44px; height: 4px; background: rgba(248,243,232,0.15); border-radius: 2px; margin: 0 auto 20px; }
+        .sunburst {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease 0.3s;
+        }
 
-.modal-trophy-wrap { position: relative; display: inline-block; margin-bottom: 8px; }
-.modal-trophy {
-  font-size: 72px; display: block; line-height: 1;
-  opacity: 0;
-  transform: scale(0.3) translateY(30px) rotate(-20deg);
-  transition: opacity 0s, transform 0s;
-  filter: drop-shadow(0 0 30px rgba(201,168,76,0.8));
-}
-#modal.open .modal-trophy { animation: trophy-dramatic 1s cubic-bezier(.34,1.56,.64,1) 0.2s both; }
-@keyframes trophy-dramatic {
-  0%   { opacity: 0; transform: scale(0.3) translateY(30px) rotate(-20deg); }
-  60%  { opacity: 1; transform: scale(1.2) translateY(-8px) rotate(5deg); }
-  80%  { transform: scale(0.95) translateY(2px) rotate(-2deg); }
-  100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
-}
+        #modal.open .sunburst {
+            opacity: 1;
+        }
 
-.sparkle {
-  position: absolute; width: 8px; height: 8px; background: var(--gold2);
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  opacity: 0;
-}
-#modal.open .sparkle { animation: sparkle-burst 0.8s ease-out var(--sd, 0.3s) both; }
-@keyframes sparkle-burst {
-  0%   { opacity: 0; transform: scale(0) translate(0,0); }
-  50%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.5) translate(var(--sx,0),var(--sy,0)); }
-}
+        .sunburst-inner {
+            position: absolute;
+            inset: 0;
+            background: conic-gradient(from 0deg,
+                    transparent 0deg 10deg,
+                    rgba(201, 168, 76, 0.07) 10deg 20deg,
+                    transparent 20deg 30deg,
+                    rgba(201, 168, 76, 0.05) 30deg 40deg,
+                    transparent 40deg 50deg,
+                    rgba(201, 168, 76, 0.08) 50deg 60deg,
+                    transparent 60deg 70deg,
+                    rgba(232, 201, 108, 0.06) 70deg 80deg,
+                    transparent 80deg 90deg,
+                    rgba(201, 168, 76, 0.07) 90deg 100deg,
+                    transparent 100deg 110deg,
+                    rgba(201, 168, 76, 0.05) 110deg 120deg,
+                    transparent 120deg 130deg,
+                    rgba(201, 168, 76, 0.08) 130deg 140deg,
+                    transparent 140deg 150deg,
+                    rgba(201, 168, 76, 0.06) 150deg 160deg,
+                    transparent 160deg 170deg,
+                    rgba(201, 168, 76, 0.07) 170deg 180deg,
+                    transparent 180deg 190deg,
+                    rgba(201, 168, 76, 0.05) 190deg 200deg,
+                    transparent 200deg 210deg,
+                    rgba(201, 168, 76, 0.08) 210deg 220deg,
+                    transparent 220deg 230deg,
+                    rgba(201, 168, 76, 0.06) 230deg 240deg,
+                    transparent 240deg 250deg,
+                    rgba(201, 168, 76, 0.07) 250deg 260deg,
+                    transparent 260deg 270deg,
+                    rgba(201, 168, 76, 0.05) 270deg 280deg,
+                    transparent 280deg 290deg,
+                    rgba(201, 168, 76, 0.08) 290deg 300deg,
+                    transparent 300deg 310deg,
+                    rgba(201, 168, 76, 0.06) 310deg 320deg,
+                    transparent 320deg 330deg,
+                    rgba(201, 168, 76, 0.07) 330deg 340deg,
+                    transparent 340deg 350deg,
+                    rgba(201, 168, 76, 0.05) 350deg 360deg);
+            border-radius: 50%;
+            animation: sunburst-spin 12s linear infinite;
+        }
 
-.modal-congrats {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px; font-weight: 400;
-  color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
-  margin-bottom: 6px; opacity: 0; transition: opacity 0s;
-}
-#modal.open .modal-congrats { animation: fadeup 0.6s ease 0.6s both; }
+        @keyframes sunburst-spin {
+            from {
+                transform: rotate(0deg);
+            }
 
-.modal-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 36px; font-weight: 700;
-  line-height: 1.1; margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--gold3), var(--gold2), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  opacity: 0;
-}
-#modal.open .modal-title { animation: title-reveal 0.8s cubic-bezier(.34,1.56,.64,1) 0.7s both; }
-@keyframes title-reveal {
-  0%   { opacity: 0; transform: scale(0.85) translateY(20px); letter-spacing: -0.02em; }
-  100% { opacity: 1; transform: scale(1) translateY(0); letter-spacing: normal; }
-}
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-.modal-divider {
-  width: 50px; height: 1px; margin: 0 auto 20px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0;
-}
-#modal.open .modal-divider { animation: fadeup 0.5s ease 0.9s both; }
+        .modal-sheet-bg1 {
+            width: 240px;
+            height: 240px;
+            background: #c9a84c;
+            top: -100px;
+            right: -60px;
+            filter: blur(120px);
+            opacity: 0.12;
+        }
 
-.modal-card {
-  background: rgba(201,168,76,0.06); border: 1px solid var(--border);
-  border-radius: 18px; padding: 4px 0 8px; margin-bottom: 24px; opacity: 0;
-}
-#modal.open .modal-card { animation: fadeup 0.6s ease 1s both; }
+        .modal-sheet-bg2 {
+            width: 200px;
+            height: 200px;
+            background: #1a3a8a;
+            bottom: -60px;
+            left: -40px;
+            filter: blur(100px);
+            opacity: 0.18;
+        }
 
-.modal-row {
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 14px 20px; border-bottom: 1px solid rgba(201,168,76,0.1);
-}
-.modal-row:last-of-type { border-bottom: none; }
-.modal-row-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-.modal-row-val { font-size: 15px; font-weight: 600; color: var(--gold2); text-align: right; max-width: 60%; }
+        .modal-handle {
+            width: 44px;
+            height: 4px;
+            background: rgba(248, 243, 232, 0.15);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
 
-.lulus-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: linear-gradient(135deg, rgba(110,231,160,0.15), rgba(52,211,153,0.08));
-  border: 1px solid rgba(110,231,160,0.35); border-radius: 100px; padding: 6px 14px;
-  font-size: 13px; font-weight: 700; color: #6ee7a0; letter-spacing: 0.08em;
-  animation: lulus-glow 2s ease-in-out infinite;
-}
-@keyframes lulus-glow {
-  0%,100% { box-shadow: 0 0 8px rgba(110,231,160,0.2); }
-  50%      { box-shadow: 0 0 24px rgba(110,231,160,0.5); }
-}
+        .modal-trophy-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
 
-.btn-close {
-  width: 100%; padding: 15px; background: rgba(201,168,76,0.1);
-  border: 1px solid var(--border); border-radius: var(--r);
-  color: var(--gold2); font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: all 0.3s ease; opacity: 0;
-}
-#modal.open .btn-close { animation: fadeup 0.5s ease 1.2s both; }
-.btn-close:hover { background: rgba(201,168,76,0.18); }
+        .modal-trophy {
+            font-size: 72px;
+            display: block;
+            line-height: 1;
+            opacity: 0;
+            transform: scale(0.3) translateY(30px) rotate(-20deg);
+            transition: opacity 0s, transform 0s;
+            filter: drop-shadow(0 0 30px rgba(201, 168, 76, 0.8));
+        }
 
-/* ─── CONFETTI CANVAS ───────────────────────────────────── */
-#confetti-canvas { position: fixed; inset: 0; z-index: 250; pointer-events: none; }
-.confetti-wrap { position: absolute; inset: 0; pointer-events: none; border-radius: 36px 36px 0 0; overflow: hidden; }
-.cp { position: absolute; top: -10px; width: 8px; height: 8px; border-radius: 2px; animation: fall-c 2.5s ease-in forwards; opacity: 0; }
-.firework { position: fixed; pointer-events: none; z-index: 260; }
-.firework-particle {
-  position: absolute; width: 4px; height: 4px; border-radius: 50%;
-  animation: fw-particle var(--dur,1s) ease-out var(--del,0s) forwards; opacity: 0;
-}
-@keyframes fw-particle { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--tx,0),var(--ty,0)) scale(0.3); } }
-@keyframes emblem-in { from { transform: scale(0.6) rotate(-20deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
-@keyframes fadeup { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse-dot { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
-@keyframes ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes btn-glow {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 8px 24px rgba(201,168,76,0.35), 0 2px 6px rgba(0,0,0,0.4); }
-  50%       { box-shadow: 0 0 0 1px rgba(201,168,76,0.5), 0 8px 36px rgba(201,168,76,0.55), 0 2px 6px rgba(0,0,0,0.4); }
-}
-@keyframes ripple { to { opacity: 1; transform: scale(1.5); opacity: 0; } }
-@keyframes fall-c { 0% { top: -10px; opacity: 1; } 100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(var(--dx)); } }
+        #modal.open .modal-trophy {
+            animation: trophy-dramatic 1s cubic-bezier(.34, 1.56, .64, 1) 0.2s both;
+        }
 
-.page::-webkit-scrollbar { width: 3px; }
-.page::-webkit-scrollbar-track { background: transparent; }
-.page::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
-</style>
+        @keyframes trophy-dramatic {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(30px) rotate(-20deg);
+            }
+
+            60% {
+                opacity: 1;
+                transform: scale(1.2) translateY(-8px) rotate(5deg);
+            }
+
+            80% {
+                transform: scale(0.95) translateY(2px) rotate(-2deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(0deg);
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--gold2);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0;
+        }
+
+        #modal.open .sparkle {
+            animation: sparkle-burst 0.8s ease-out var(--sd, 0.3s) both;
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                opacity: 0;
+                transform: scale(0) translate(0, 0);
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.5) translate(var(--sx, 0), var(--sy, 0));
+            }
+        }
+
+        .modal-congrats {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--gold);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0;
+            transition: opacity 0s;
+        }
+
+        #modal.open .modal-congrats {
+            animation: fadeup 0.6s ease 0.6s both;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold3), var(--gold2), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+        }
+
+        #modal.open .modal-title {
+            animation: title-reveal 0.8s cubic-bezier(.34, 1.56, .64, 1) 0.7s both;
+        }
+
+        @keyframes title-reveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(20px);
+                letter-spacing: -0.02em;
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                letter-spacing: normal;
+            }
+        }
+
+        .modal-divider {
+            width: 50px;
+            height: 1px;
+            margin: 0 auto 20px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+        }
+
+        #modal.open .modal-divider {
+            animation: fadeup 0.5s ease 0.9s both;
+        }
+
+        .modal-card {
+            background: rgba(201, 168, 76, 0.06);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 4px 0 8px;
+            margin-bottom: 24px;
+            opacity: 0;
+        }
+
+        #modal.open .modal-card {
+            animation: fadeup 0.6s ease 1s both;
+        }
+
+        .modal-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+        }
+
+        .modal-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .modal-row-label {
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .modal-row-val {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gold2);
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .lulus-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(110, 231, 160, 0.15), rgba(52, 211, 153, 0.08));
+            border: 1px solid rgba(110, 231, 160, 0.35);
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6ee7a0;
+            letter-spacing: 0.08em;
+            animation: lulus-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes lulus-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(110, 231, 160, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 24px rgba(110, 231, 160, 0.5);
+            }
+        }
+
+        .btn-close {
+            width: 100%;
+            padding: 15px;
+            background: rgba(201, 168, 76, 0.1);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            color: var(--gold2);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        #modal.open .btn-close {
+            animation: fadeup 0.5s ease 1.2s both;
+        }
+
+        .btn-close:hover {
+            background: rgba(201, 168, 76, 0.18);
+        }
+
+        /* ─── CONFETTI CANVAS ───────────────────────────────────── */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 250;
+            pointer-events: none;
+        }
+
+        .confetti-wrap {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: 36px 36px 0 0;
+            overflow: hidden;
+        }
+
+        .cp {
+            position: absolute;
+            top: -10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            animation: fall-c 2.5s ease-in forwards;
+            opacity: 0;
+        }
+
+        .firework {
+            position: fixed;
+            pointer-events: none;
+            z-index: 260;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: fw-particle var(--dur, 1s) ease-out var(--del, 0s) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fw-particle {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.3);
+            }
+        }
+
+        @keyframes emblem-in {
+            from {
+                transform: scale(0.6) rotate(-20deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeup {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ring-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes btn-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.3), 0 8px 24px rgba(201, 168, 76, 0.35), 0 2px 6px rgba(0, 0, 0, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.5), 0 8px 36px rgba(201, 168, 76, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        @keyframes ripple {
+            to {
+                opacity: 1;
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fall-c {
+            0% {
+                top: -10px;
+                opacity: 1;
+            }
+
+            100% {
+                top: 110%;
+                opacity: 0;
+                transform: rotate(720deg) translateX(var(--dx));
+            }
+        }
+
+        .page::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .page::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .page::-webkit-scrollbar-thumb {
+            background: rgba(201, 168, 76, 0.2);
+            border-radius: 2px;
+        }
+    </style>
 </head>
+
 <body>
 
-<div id="app-wrapper">
+    <div id="app-wrapper">
 
-  <div class="school-bg" id="schoolBg"></div>
+        <div class="school-bg" id="schoolBg"></div>
 
-  <div id="splash">
-    <div class="orb splash-bg1"></div>
-    <div class="orb splash-bg2"></div>
-    <div class="splash-emblem" style="border: none;">
-      <img src="https://i.ibb.co.com/6cCBt1tC/IMG-7083.png" alt="Logo SMP PGRI 3 Denpasar" style="width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 2;">
-    </div>
-    <div class="splash-school">SMP PGRI 3<br>Denpasar</div>
-    <div class="splash-year">Tahun Pelajaran 2025 / 2026</div>
-    <div class="splash-divider"></div>
-    <div class="splash-tagline">Pengumuman Kelulusan Resmi</div>
-    <div class="splash-loader"><span></span><span></span><span></span></div>
-  </div>
-
-  <div id="main">
-
-    <div class="topbar">
-      <div class="topbar-school">SMP PGRI 3 Denpasar</div>
-      <div class="topbar-year">Tahun Pelajaran 2025 / 2026</div>
-    </div>
-
-    <div class="dots">
-      <div class="dot active" onclick="goTo(0)"></div>
-      <div class="dot" onclick="goTo(1)"></div>
-      <div class="dot" onclick="goTo(2)"></div>
-    </div>
-
-    <div class="pages">
-
-      <div class="page active" id="p0">
-        <div class="principal-highlight-bg"></div>
-
-        <div class="principal-photo-wrap">
-          <img class="principal-photo" src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png" alt="Foto Kepala Sekolah" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%22220%22%3E%3Crect fill=%22%23122040%22 width=%22220%22 height=%22220%22 rx=%22110%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2216%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
-        </div>
-        <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
-        <div class="principal-title">Kepala Sekolah SMP PGRI 3 Denpasar</div>
-        
-        <div class="section-label"><span>Sambutan</span></div>
-        <div class="speech-card">
-          <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam sejahtera untuk kita semua,</p>
-          <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.</p>
-          <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin, dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.</p>
-          <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan proses pendidikan dengan baik.</p>
-          <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses pendidikan hingga pada tahap ini.</p>
-          <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti bermimpi.</p>
-          <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
-          <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
+        <div id="splash">
+            <div class="orb splash-bg1"></div>
+            <div class="orb splash-bg2"></div>
+            <div class="splash-emblem" style="border: none;">
+                <img src="https://i.ibb.co.com/6cCBt1tC/IMG-7083.png" alt="Logo SMP PGRI 3 Denpasar"
+                    style="width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 2;">
+            </div>
+            <div class="splash-school">SMP PGRI 3<br>Denpasar</div>
+            <div class="splash-year">Tahun Pelajaran 2025 / 2026</div>
+            <div class="splash-divider"></div>
+            <div class="splash-tagline">Pengumuman Kelulusan Resmi</div>
+            <div class="splash-loader"><span></span><span></span><span></span></div>
         </div>
 
-        <button class="btn-next" id="btnNext0" onclick="nextPage()">
-          <span>Informasi Kelulusan</span>
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
-          </svg>
-        </button>
-      </div>
+        <div id="main">
 
-      <div class="page" id="p1">
-        <div class="photo-info-wrap">
-          <img class="photo-info" id="photo-p2"
-               src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png"
-               alt="Foto Kepala Sekolah"
-               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%23122040%22 width=%22110%22 height=%22110%22 rx=%2255%22/%3E%3Ctext x=%2250%25%22 y=%2254%25%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22DM Sans%22 font-size=%2213%22 fill=%22%23c9a84c%22%3EFoto%3C/text%3E%3C/svg%3E'">
+            <div class="topbar">
+                <div class="topbar-school">SMP PGRI 3 Denpasar</div>
+                <div class="topbar-year">Tahun Pelajaran 2025 / 2026</div>
+            </div>
+
+            <div class="dots">
+                <div class="dot active" onclick="goTo(0)"></div>
+                <div class="dot" onclick="goTo(1)"></div>
+                <div class="dot" onclick="goTo(2)"></div>
+            </div>
+
+            <div class="pages">
+
+                <div class="page active" id="p0">
+                    <div class="principal-highlight-bg"></div>
+
+                    <div class="principal-photo-wrap">
+                        <img class="principal-photo" src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png"
+                            alt="Foto Kepala Sekolah">
+                    </div>
+                    <div class="principal-name">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+                    <div class="principal-title">Kepala Sekolah SMP PGRI 3 Denpasar</div>
+
+                    <div class="section-label"><span>Sambutan</span></div>
+                    <div class="speech-card">
+                        <p class="speech-opener">Om Swastyastu,<br>Wa'alaikumsalam warahmatullahi wabarakatuh.<br>Salam
+                            sejahtera untuk kita semua,</p>
+                        <p>Puji syukur kita panjatkan ke hadapan Ida Sang Hyang Widhi Wasa / Tuhan Yang Maha Esa karena
+                            atas asung kertha wara nugraha-Nya, pada hari ini SMP PGRI 3 Denpasar dapat menyampaikan
+                            pengumuman kelulusan peserta didik Tahun Pelajaran 2025/2026 melalui website resmi sekolah.
+                        </p>
+                        <p>Anak-anakku yang saya banggakan, kelulusan merupakan salah satu tahapan penting dalam
+                            perjalanan pendidikan kalian. Hari ini menjadi bukti dari kerja keras, ketekunan, disiplin,
+                            dan semangat belajar yang telah kalian lakukan selama menempuh pendidikan di sekolah ini.
+                        </p>
+                        <p>Untuk itu, saya mengucapkan selamat kepada seluruh peserta didik yang telah menyelesaikan
+                            proses pendidikan dengan baik.</p>
+                        <p>Keberhasilan ini tentu tidak terlepas dari doa dan dukungan orang tua, bimbingan bapak dan
+                            ibu guru, serta semangat juang kalian sendiri. Saya menyampaikan terima kasih dan apresiasi
+                            yang setinggi-tingginya kepada seluruh pihak yang telah bersama-sama mendukung proses
+                            pendidikan hingga pada tahap ini.</p>
+                        <p>Kelulusan bukanlah akhir dari perjalanan, melainkan awal untuk meraih cita-cita dan masa
+                            depan yang lebih baik. Tetaplah rendah hati, terus belajar, dan jangan pernah berhenti
+                            bermimpi.</p>
+                        <p>Akhir kata, selamat dan sukses kepada seluruh peserta didik Tahun Pelajaran 2025/2026. Semoga
+                            langkah kalian ke depan selalu diberikan kemudahan dan keberhasilan.</p>
+                        <p class="speech-opener" style="margin-bottom:0;">Om Santih, Santih, Santih Om.</p>
+                    </div>
+
+                    <button class="btn-next" id="btnNext0" onclick="nextPage()">
+                        <span>Informasi Kelulusan</span>
+                        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="9" x2="14" y2="9" />
+                            <polyline points="10 5 14 9 10 13" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="page" id="p1">
+                    <div class="photo-info-wrap">
+                        <img class="photo-info" src="https://i.ibb.co.com/Sp1gDWd/Desain-tanpa-judul.png"
+                            alt="Foto Kepala Sekolah">
+                    </div>
+                    <div class="name-info">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
+                    <div class="title-info">Kepala Sekolah</div>
+
+                    <div class="section-label"><span>Pengumuman Kelulusan</span></div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="info-label">Tanggal Pengumuman</div>
+                            <div class="info-val">Rabu, 28 Mei 2026</div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="info-label">Jenjang</div>
+                            <div class="info-val">SMP PGRI 3 Denpasar — Kelas IX</div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="info-label">Tahun Pelajaran</div>
+                            <div class="info-val">2025 / 2026</div>
+                        </div>
+                    </div>
+
+                    <div class="section-label"><span>Ketentuan</span></div>
+                    <div class="speech-card">
+                        <p>Peserta didik dinyatakan lulus apabila telah memenuhi seluruh persyaratan kelulusan sesuai
+                            ketentuan yang berlaku, termasuk penyelesaian seluruh program pembelajaran dan penilaian
+                            akhir jenjang.</p>
+                        <p>Untuk memverifikasi kelulusan, silakan masukkan <strong
+                                style="color:var(--gold2);">NIS</strong> dan <strong style="color:var(--gold2);">Nama
+                                Lengkap</strong> sesuai data yang terdaftar di sekolah pada halaman selanjutnya.</p>
+                        <p>Jika terdapat kekeliruan data atau pertanyaan lebih lanjut, harap menghubungi pihak sekolah
+                            secara langsung.</p>
+                    </div>
+
+                    <button class="btn-next" id="btnNext1" onclick="nextPage()">
+                        <span>Cek Kelulusan</span>
+                        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="9" x2="14" y2="9" />
+                            <polyline points="10 5 14 9 10 13" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="page" id="p2">
+                    <div class="form-hero">
+                        <div class="form-hero-title">Cek Kelulusan</div>
+                        <div class="form-hero-sub">Masukkan data sesuai absensi sekolah</div>
+                    </div>
+                    <div
+                        style="background:var(--glass); border:1px solid var(--border); border-radius:var(--rb); padding:28px 22px;">
+                        <div class="input-group">
+                            <label class="input-label" for="nisInput">NIS — Nomor Induk Siswa</label>
+                            <input class="input-field" id="nisInput" type="text" inputmode="numeric"
+                                placeholder="Contoh: 12345" maxlength="10" autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="namaInput">Nama Lengkap</label>
+                            <input class="input-field" id="namaInput" type="text" placeholder="Contoh: ANDI WIJAYA"
+                                autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+                        </div>
+                        <div id="errBox"></div>
+                        <button class="btn-check" id="btnCheck" onclick="cekKelulusan()">Periksa Kelulusan</button>
+                    </div>
+                    <div
+                        style="text-align:center; margin-top:20px; font-size:12px; color:var(--muted); line-height:1.7;">
+                        Jika data tidak ditemukan, pastikan penulisan<br>NIS dan nama sesuai dengan data sekolah.
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="name-info">Ni Made Chandra Widayanti, S.Pd., M.Li</div>
-        <div class="title-info">Kepala Sekolah</div>
-        
-        <div class="section-label"><span>Pengumuman Kelulusan</span></div>
-        <div class="info-card">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-          </div>
-          <div>
-            <div class="info-label">Tanggal Pengumuman</div>
-            <div class="info-val">Rabu, 28 Mei 2026</div>
-          </div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-            </svg>
-          </div>
-          <div>
-            <div class="info-label">Jenjang</div>
-            <div class="info-val">SMP PGRI 3 Denpasar — Kelas IX</div>
-          </div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-          </div>
-          <div>
-            <div class="info-label">Tahun Pelajaran</div>
-            <div class="info-val">2025 / 2026</div>
-          </div>
-        </div>
-        
-        <div class="section-label"><span>Ketentuan</span></div>
-        <div class="speech-card">
-          <p>Peserta didik dinyatakan lulus apabila telah memenuhi seluruh persyaratan kelulusan sesuai ketentuan yang berlaku, termasuk penyelesaian seluruh program pembelajaran dan penilaian akhir jenjang.</p>
-          <p>Untuk memverifikasi kelulusan, silakan masukkan <strong style="color:var(--gold2);">NIS</strong> dan <strong style="color:var(--gold2);">Nama Lengkap</strong> sesuai data yang terdaftar di sekolah pada halaman selanjutnya.</p>
-          <p>Jika terdapat kekeliruan data atau pertanyaan lebih lanjut, harap menghubungi pihak sekolah secara langsung.</p>
+
+        <div id="drama-overlay">
+            <div class="drama-ring">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <path d="M30 8l4.5 13.5h14L36.8 30l4.5 13.5L30 36 19.7 43.5 24.2 30 12.5 21.5h14z" stroke="#c9a84c"
+                        stroke-width="1.5" fill="none" />
+                    <circle cx="30" cy="30" r="5" fill="#c9a84c" opacity="0.8" />
+                </svg>
+            </div>
+            <div class="drama-text" id="dramaText">Memeriksa data...</div>
+            <div class="drama-bar">
+                <div class="drama-bar-fill" id="dramaBar"></div>
+            </div>
         </div>
 
-        <button class="btn-next" id="btnNext1" onclick="nextPage()">
-          <span>Cek Kelulusan</span>
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="9" x2="14" y2="9"/><polyline points="10 5 14 9 10 13"/>
-          </svg>
-        </button>
-      </div>
+        <div id="flash-overlay"></div>
 
-      <div class="page" id="p2">
-        <div class="form-hero">
-          <div class="form-hero-title">Cek Kelulusan</div>
-          <div class="form-hero-sub">Masukkan data sesuai absensi sekolah</div>
-        </div>
-        <div style="background:var(--glass); border:1px solid var(--border); border-radius:var(--rb); padding:28px 22px;">
-          <div class="input-group">
-            <label class="input-label" for="nisInput">NIS — Nomor Induk Siswa</label>
-            <input class="input-field" id="nisInput" type="text" inputmode="numeric" placeholder="Contoh: 12345" maxlength="10" autocomplete="off">
-          </div>
-          <div class="input-group">
-            <label class="input-label" for="namaInput">Nama Lengkap</label>
-            <input class="input-field" id="namaInput" type="text" placeholder="Contoh: ANDI WIJAYA" autocomplete="off"
-                   oninput="this.value=this.value.toUpperCase()">
-          </div>
-          <div id="errBox"></div>
-          <button class="btn-check" id="btnCheck" onclick="cekKelulusan()">Periksa Kelulusan</button>
-        </div>
-        <div style="text-align:center; margin-top:20px; font-size:12px; color:var(--muted); line-height:1.7;">
-          Jika data tidak ditemukan, pastikan penulisan<br>NIS dan nama sesuai dengan data sekolah.
-        </div>
-      </div>
+        <div id="modal" onclick="closeModal(event)">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+                <div class="orb modal-sheet-bg1"></div>
+                <div class="orb modal-sheet-bg2"></div>
 
-    </div>
-  </div>
-  
-  <div id="drama-overlay">
-    <div class="drama-ring">
-      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-        <path d="M30 8l4.5 13.5h14L36.8 30l4.5 13.5L30 36 19.7 43.5 24.2 30 12.5 21.5h14z"
-              stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-        <circle cx="30" cy="30" r="5" fill="#c9a84c" opacity="0.8"/>
-      </svg>
-    </div>
-    <div class="drama-text" id="dramaText">Memeriksa data...</div>
-    <div class="drama-bar"><div class="drama-bar-fill" id="dramaBar"></div></div>
-  </div>
+                <div class="sunburst">
+                    <div class="sunburst-inner"></div>
+                </div>
 
-  <div id="flash-overlay"></div>
+                <div class="confetti-wrap" id="confettiWrap"></div>
 
-  <div id="modal" onclick="closeModal(event)">
-    <div class="modal-sheet" onclick="event.stopPropagation()">
-      <div class="orb modal-sheet-bg1"></div>
-      <div class="orb modal-sheet-bg2"></div>
+                <div class="modal-handle"></div>
 
-      <div class="sunburst"><div class="sunburst-inner"></div></div>
+                <div class="modal-trophy-wrap">
+                    <span class="modal-trophy">🏆</span>
+                    <div class="sparkle"
+                        style="top:5px;left:10px;--sd:0.4s;--sx:-25px;--sy:-20px;width:10px;height:10px;"></div>
+                    <div class="sparkle"
+                        style="top:0px;right:10px;--sd:0.5s;--sx:25px;--sy:-25px;width:8px;height:8px;background:#e8c96c">
+                    </div>
+                    <div class="sparkle"
+                        style="top:20px;left:0px;--sd:0.35s;--sx:-30px;--sy:-10px;width:7px;height:7px;background:#f5e0a0">
+                    </div>
+                    <div class="sparkle"
+                        style="top:20px;right:0px;--sd:0.55s;--sx:30px;--sy:-5px;width:9px;height:9px;"></div>
+                    <div class="sparkle"
+                        style="bottom:5px;left:15px;--sd:0.45s;--sx:-20px;--sy:20px;width:6px;height:6px;background:#6ee7a0">
+                    </div>
+                    <div class="sparkle"
+                        style="bottom:5px;right:15px;--sd:0.6s;--sx:20px;--sy:20px;width:8px;height:8px;background:#7eb8f7">
+                    </div>
+                    <div class="sparkle"
+                        style="top:10px;left:50%;--sd:0.3s;--sx:0px;--sy:-35px;width:7px;height:7px;background:#f9a8d4">
+                    </div>
+                </div>
 
-      <div class="confetti-wrap" id="confettiWrap"></div>
+                <div class="modal-congrats">✦ Selamat! ✦</div>
+                <div class="modal-title" id="modalTitle">Anda Telah<br>Dinyatakan Lulus</div>
+                <div class="modal-divider"></div>
 
-      <div class="modal-handle"></div>
+                <div class="modal-card" id="modalInfo">
+                </div>
 
-      <div class="modal-trophy-wrap">
-        <span class="modal-trophy">🏆</span>
-        <div class="sparkle" style="top:5px;left:10px;--sd:0.4s;--sx:-25px;--sy:-20px;width:10px;height:10px;"></div>
-        <div class="sparkle" style="top:0px;right:10px;--sd:0.5s;--sx:25px;--sy:-25px;width:8px;height:8px;background:#e8c96c"></div>
-        <div class="sparkle" style="top:20px;left:0px;--sd:0.35s;--sx:-30px;--sy:-10px;width:7px;height:7px;background:#f5e0a0"></div>
-        <div class="sparkle" style="top:20px;right:0px;--sd:0.55s;--sx:30px;--sy:-5px;width:9px;height:9px;"></div>
-        <div class="sparkle" style="bottom:5px;left:15px;--sd:0.45s;--sx:-20px;--sy:20px;width:6px;height:6px;background:#6ee7a0"></div>
-        <div class="sparkle" style="bottom:5px;right:15px;--sd:0.6s;--sx:20px;--sy:20px;width:8px;height:8px;background:#7eb8f7"></div>
-        <div class="sparkle" style="top:10px;left:50%;--sd:0.3s;--sx:0px;--sy:-35px;width:7px;height:7px;background:#f9a8d4"></div>
-      </div>
-
-      <div class="modal-congrats">✦ Selamat! ✦</div>
-      <div class="modal-title" id="modalTitle">Anda Telah<br>Dinyatakan Lulus</div>
-      <div class="modal-divider"></div>
-
-      <div class="modal-card" id="modalInfo">
+                <button class="btn-close" onclick="closeModalBtn()">✕ &nbsp; Tutup</button>
+            </div>
         </div>
 
-      <button class="btn-close" onclick="closeModalBtn()">✕ &nbsp; Tutup</button>
-    </div>
-  </div>
+    </div><canvas id="confetti-canvas"></canvas>
 
-</div><canvas id="confetti-canvas"></canvas>
+    <script>
+        /* ───────────────────────────────────────────────────────────
+           ▼▼▼  DATA SISWA  ▼▼▼
+        ─────────────────────────────────────────────────────────── */
+        const DATA_SISWA = [
+            { nis: '13640', nama: 'ADHAM AL-FAJRI WATARA' },
+            { nis: '13641', nama: 'AKHMAD SURYA RAJAWALI' },
+            { nis: '13642', nama: 'ANAK AGUNG AYU OKA SHINTA MAHARANI' },
+            { nis: '13643', nama: 'ANAK AGUNG PUTU RANU DHARMA PUTRA WIBAWA DWI DWIPA' },
+            { nis: '13644', nama: 'AULIA CAHYA MELANI' },
+            { nis: '13645', nama: 'BRIGITTA IMELDA FEBRIANI' },
+            { nis: '13646', nama: 'DAMAR PUTRA GUMILANG' },
+            { nis: '13647', nama: 'DEWA AYU CALLISTA WIDIANTARI' },
+            { nis: '13648', nama: 'DEWA MADE SAKTI PERDANA' },
+            { nis: '13649', nama: 'GERALDIN AUREL APRILLIA FEBRY AYUDHA' },
+            { nis: '13650', nama: 'I GUSTI NGURAH KOMANG KEVIN ARYA WIGUNA' },
+            { nis: '13651', nama: 'I KADEK BAYU DARMAYASA' },
+            { nis: '13652', nama: 'I WAYAN AGUS DWIPAYANA' },
+            { nis: '13653', nama: 'IDA AYU PUTU NISA ADNYA SARI' },
+            { nis: '13654', nama: 'I KADEK NOVA PRADITYA DHARMA PUTRA' },
+            { nis: '13655', nama: 'KOMANG AGUS KRISNA SETIAWAN' },
+            { nis: '13656', nama: 'KOMANG AYU SUKMA DEWI' },
+            { nis: '13657', nama: 'LEGISTA AGUNG PRAMESTI' },
+            { nis: '13658', nama: 'MADE MANIK PUTRAWAN' },
+            { nis: '13659', nama: 'MARKO SANAM' },
+            { nis: '13660', nama: 'MEILANIE YAHYA' },
+            { nis: '13661', nama: 'MOHAMMAD REVYANSYAH' },
+            { nis: '13662', nama: 'NI KOMANG AYU TRIASTUTI' },
+            { nis: '13663', nama: 'NI KOMANG BUNGA LESTARI' },
+            { nis: '13664', nama: 'NI LUH PUTU CINTA RAHAYU' },
+            { nis: '13665', nama: 'NI LUH TIKA APRILIANA' },
+            { nis: '13666', nama: 'NI MADE PRADNYA PARAMITHA DEWI' },
+            { nis: '13667', nama: 'NI PUTU KINAN DYANTARI' },
+            { nis: '13668', nama: 'NI PUTU NIA ANA TASYA DEWI' },
+            { nis: '13670', nama: 'OLIVIA GRESIA MORU MANEK' },
+            { nis: '13671', nama: 'PUTU ARTA WIADNYANA' },
+            { nis: '13672', nama: 'PUTU FORLAN KENCANA PUTRA' },
+            { nis: '13673', nama: 'PUTU KRISHNA OVARIANA' },
+            { nis: '13674', nama: 'PUTU RAMA NARYANA SUPUTRA PRAMANA' },
+            { nis: '13675', nama: 'PUTU TIKA PRATIWI' },
+            { nis: '13676', nama: 'PUTU WILLY ARIA ARTA' },
+            { nis: '13677', nama: 'RA. FAADHILAH SYAKIRA KHANIA ANJANI BC' },
+            { nis: '13678', nama: 'RADEN RORO PELANGI KIRANA JAYANTI' },
+            { nis: '13679', nama: 'RAVA ALRIZKY PRASSANDHY' },
+            { nis: '13680', nama: 'ANAK AGUNG AYU SRI MAS KRISNANTARI' },
+            { nis: '13681', nama: 'ANISA LIDYA LESTARI' },
+            { nis: '13682', nama: 'CHIKA RAMADHANI WIJAYANTI' },
+            { nis: '13683', nama: 'DIMAS ANGGA PURWANTO' },
+            { nis: '13685', nama: 'FEBRIYANI PUSPA PRATIWI' },
+            { nis: '13686', nama: 'I GEDE BAGUS KARTANA DIPUTRA' },
+            { nis: '13687', nama: 'I GEDE CAHYANA PUTRA' },
+            { nis: '13688', nama: 'I GEDE GALANG CITTA PRAASADA' },
+            { nis: '13689', nama: 'I KADEK AGUS PURNAWIRAWAN' },
+            { nis: '13690', nama: 'I KOMANG ANDIKA SAPUTRA' },
+            { nis: '13691', nama: 'I KOMANG ARYA VIDIANA KRISNA' },
+            { nis: '13692', nama: 'I NYOMAN DIVTHA PERMANA' },
+            { nis: '13693', nama: 'I PUTU ARYA SIVA BUDI KUSUMA' },
+            { nis: '13694', nama: 'ISNAILA STEFHANI' },
+            { nis: '13695', nama: 'KADEK DWI DHARMA RADITYA' },
+            { nis: '13696', nama: 'KADEK ISAKA SINTA PUSPA YANI' },
+            { nis: '13697', nama: 'KOMANG HARUM NINGSIH' },
+            { nis: '13698', nama: 'I KOMANG TANGKAS' },
+            { nis: '13699', nama: 'KOMANG TRISTAN BAYU SUARTAMA' },
+            { nis: '13700', nama: 'LUH PUTU DINDA MAHARANI' },
+            { nis: '13701', nama: 'MARCELLINO NICHOLAS RAHMAN' },
+            { nis: '13702', nama: 'NI GUSTI AGUNG RATIH PRADNYAWATI' },
+            { nis: '13703', nama: 'NI GUSTI SRI AGUNG INTAN WULANSARI' },
+            { nis: '13704', nama: 'NI KADEK OKTAVIANI' },
+            { nis: '13705', nama: 'NI KOMANG ANGGRENI' },
+            { nis: '13706', nama: 'NI KOMANG LASMINI' },
+            { nis: '13707', nama: 'NI LUH AYU OKTAVIANI PUTRI' },
+            { nis: '13708', nama: 'NI LUH LADYNA CANDITA DEWI' },
+            { nis: '13709', nama: 'NI MADE AYU ANGGANI' },
+            { nis: '13710', nama: 'NI MADE MEDY DWITA ANTARI' },
+            { nis: '13711', nama: 'NI PUTU ASHA DAMARA WIDIYANTI' },
+            { nis: '13712', nama: 'NUR AIDY FITROH' },
+            { nis: '13713', nama: 'OKTA VIANA KARTIKA' },
+            { nis: '13714', nama: 'PUTU AYU SERATI DEWI' },
+            { nis: '13715', nama: 'PUTU DARMA GHAURY DEWI' },
+            { nis: '13716', nama: 'PUTU GAURI CANDRA BERLIAN' },
+            { nis: '13717', nama: 'PUTU KIRANI CAHYANING PURNAMA' },
+            { nis: '13718', nama: 'RAMADHAN ZAKI ALDI YANTO' },
+            { nis: '13719', nama: 'RASELA WARDANI' },
+            { nis: '13720', nama: 'RAYYAN ABIMANYU BAEHAQI' },
+            { nis: '13721', nama: 'WIDIATUNNISA' },
+            { nis: '14177', nama: 'I KOMANG WAHYU JULIADI SAPUTRA' },
+            { nis: '13722', nama: 'ADI DHARMA PUTRA' },
+            { nis: '13724', nama: 'AGUS GANDHI SUGIANDIKA' },
+            { nis: '13725', nama: 'AGUS KADEK MORISKI ANGELO' },
+            { nis: '13727', nama: 'AURILLIA PUTRI RAMADANI' },
+            { nis: '13728', nama: 'AZAM ROMADHON' },
+            { nis: '13730', nama: 'GILANG DWI DERMAWAN' },
+            { nis: '13731', nama: 'GISA MARISKA ANJANI' },
+            { nis: '13732', nama: 'HANA L.KANA BR.SIMANJUNTAK' },
+            { nis: '13733', nama: 'I GEDE ARTA WIGUNA' },
+            { nis: '13734', nama: 'I GEDE PURNAMA PUTRA' },
+            { nis: '13735', nama: 'I KADEK OKTADINANTA SATRIA WIBAWA' },
+            { nis: '13736', nama: 'I KOMANG AGUS DANANJAYA' },
+            { nis: '13737', nama: 'I KOMANG DIKA SASTRAWAN' },
+            { nis: '13738', nama: 'I MADE ARTA JAYA KUSUMA' },
+            { nis: '13739', nama: 'I MADE OKTA ANGGARA PUTRA' },
+            { nis: '13740', nama: 'I NYOMAN VINO SATRIA PUTRA' },
+            { nis: '13741', nama: 'I PUTU GEDE SASTRAWAN' },
+            { nis: '13742', nama: 'I WAYAN ARIANA' },
+            { nis: '13743', nama: 'I WAYAN JATI ADITYA PARAMUDITA' },
+            { nis: '13744', nama: 'MUHAMMAD RIDWANULLAH ANNASYWAN' },
+            { nis: '13745', nama: 'MUHAMMAD ROFFIKI' },
+            { nis: '13746', nama: 'NATASYA ROSALINDA NADINE PANTUR' },
+            { nis: '13747', nama: 'NI KADEK DARMA AYU' },
+            { nis: '13748', nama: 'NI KADEK LINDA WARDANI' },
+            { nis: '13749', nama: 'NI KADEK SILA REGINA PUTRI' },
+            { nis: '13750', nama: 'NI KETUT WULANDINI' },
+            { nis: '13751', nama: 'NI KOMANG PUTRI PERMATA DEWI' },
+            { nis: '13752', nama: 'NI LUH PUTU DARMAYANTI' },
+            { nis: '13753', nama: 'NI MADE NOVITA ARIANDANI' },
+            { nis: '13754', nama: 'NI PUTU SRI AYU PUTRI ESTYANTI' },
+            { nis: '13755', nama: 'PUTU DESTA MAHARDIKA' },
+            { nis: '13756', nama: 'PUTU PRAYANA WIBAWA PUTRA' },
+            { nis: '13757', nama: 'RIANDY IZRAFIL YANSYA' },
+            { nis: '13758', nama: 'SOFIA ANA SETASIA' },
+            { nis: '13759', nama: 'SULIS APRILIA' },
+            { nis: '13760', nama: 'TANIA INDAH PRADINI' },
+            { nis: '13761', nama: 'WINDY MOURELIA PUTRI' },
+            { nis: '13762', nama: 'WISNU MAULANA AKBAR' },
+            { nis: '13763', nama: 'ZAHRA PUTRI DEWI' },
+            { nis: '13764', nama: 'ANAK AGUNG MADE AYU SRI WULAN TARI' },
+            { nis: '13765', nama: 'ASHYFA KHAIRANY SOFYAN' },
+            { nis: '13766', nama: 'FELISIA SANTIKA LIDEVI' },
+            { nis: '13767', nama: 'FIRA ALUNA SACHI RAMADHANI' },
+            { nis: '13768', nama: 'GEDE JOSSE RADITYA' },
+            { nis: '13769', nama: 'GEDE RADITYA MAHARDIKA PUTRA' },
+            { nis: '13770', nama: 'GEDE WISNU MAHARTA' },
+            { nis: '13771', nama: 'GUSTI AYU MAS ALIKA PRABHASWARI' },
+            { nis: '13772', nama: 'HAPPY ELLIANA ONK' },
+            { nis: '13773', nama: 'I GUSTI NGURAH RANGGA DWIPAYANA PUTRA' },
+            { nis: '13774', nama: 'KADEK ANTON WIRAWAN WASTIKA' },
+            { nis: '13775', nama: 'I KADEK DODI ARDYAN' },
+            { nis: '13776', nama: 'I KADEK SASTRA WIGUNA' },
+            { nis: '13777', nama: 'I KOMANG DHIMAS PRADNYANA' },
+            { nis: '13778', nama: 'I MADE ARSHAKA RAMA VEDANTHA' },
+            { nis: '13779', nama: 'I WAYAN ZU RAVA DHARMA' },
+            { nis: '13780', nama: 'IDA BAGUS DIRGAYUSA' },
+            { nis: '13781', nama: 'IDA BAGUS WIJAYA KESUMA GIRI' },
+            { nis: '13782', nama: 'JIHANIS DWI JAYANTI' },
+            { nis: '13783', nama: 'KOMANG MAHESA PUTRA' },
+            { nis: '13784', nama: 'KOMANG MITHA ANGELICA PUTRI' },
+            { nis: '13786', nama: 'MADEIRA PRINCE MARIAWAN' },
+            { nis: '13787', nama: 'MAULANA AKBAR PANGESTU' },
+            { nis: '13788', nama: 'MUHAMMAD FADIL AL ZAKY' },
+            { nis: '13789', nama: 'NI KETUT MEI SRI ANDAYANI' },
+            { nis: '13790', nama: 'NI KETUT NAYLA SANTI DEWI' },
+            { nis: '13791', nama: 'PUTU AIRIN CHRISTIANI' },
+            { nis: '13792', nama: 'NI PUTU LINA LETISIA DEWI' },
+            { nis: '13793', nama: 'NI PUTU NITA NINGSIH' },
+            { nis: '13794', nama: 'NI PUTU SINTYA DEWI' },
+            { nis: '13795', nama: 'NI WAYAN CHARLENE SUDARMA' },
+            { nis: '13796', nama: 'PUTU RANGGA DWI GUNA KRISNA PRATAMA' },
+            { nis: '13797', nama: 'RANGGA DARMA PUTRA' },
+            { nis: '13798', nama: 'REISYA JUNIA DEWI' },
+            { nis: '13799', nama: 'RIZKY YEWON NAHAK' },
+            { nis: '13800', nama: 'ROSEMARY ELLA GRACIA' },
+            { nis: '13801', nama: 'SALSABIL QISMIKA FARAH YUHAN' },
+            { nis: '13842', nama: 'KOMING SATRIA WIBAWA' },
+            { nis: '13843', nama: 'REVAN CAHYA ARSYLA' },
+            { nis: '14173', nama: 'NAUFAL AULIA ARTHA SUJATMIKO' },
+            { nis: '13802', nama: 'ANAK AGUNG KETUT WIJAYA PUTRA' },
+            { nis: '13803', nama: 'ANDHIKA NAUFAL AS SHIDDIQI' },
+            { nis: '13804', nama: 'DEWA AYU PURNAMA DEWI' },
+            { nis: '13805', nama: 'ELVINO AJI PRATAMA' },
+            { nis: '13807', nama: 'I DEWA GEDE SATRIA MAHESA CHRISNA' },
+            { nis: '13808', nama: 'I GEDE ADHI SEDANA YOGA KERTHA PUTRA PRATAMA' },
+            { nis: '13809', nama: 'I GEDE EDWIN SAPUTRA' },
+            { nis: '13810', nama: 'I GEDE PUJA' },
+            { nis: '13811', nama: 'I GUSTI AGUNG SUMERTA WIDNYANA' },
+            { nis: '13812', nama: 'I KADEK ANANDA ATMA DEVA' },
+            { nis: '13814', nama: 'I KADEK DWI ARTHA WIGUNA' },
+            { nis: '13815', nama: 'I KADEK PASEK WIDNYANA' },
+            { nis: '13816', nama: 'I KADEK WIRAGUNA' },
+            { nis: '13818', nama: 'I KOMANG ADITYA PRAMANA' },
+            { nis: '13819', nama: 'I KOMANG MAESSA MULIAWAN' },
+            { nis: '13820', nama: 'I MADE AGASTYA JUNA WIJAYA' },
+            { nis: '13821', nama: 'I MADE GALANG WINA YAKA' },
+            { nis: '13822', nama: 'I PUTU PUTRA AGUS ARI GUNAWAN' },
+            { nis: '13823', nama: 'KADEK DIMAS WIDHIA MERTA' },
+            { nis: '13824', nama: 'KADEK TASYA AGUSTINI' },
+            { nis: '13825', nama: 'KETUT BAGUS RISKI GITA CAHYAWAN' },
+            { nis: '13826', nama: 'KOMANG ARINSATI DARMA' },
+            { nis: '13827', nama: 'KOMANG SATRIA BHUWANA NUGRAHA' },
+            { nis: '13828', nama: 'KSATRIA ARKHAN ATHAYA FADILLAH' },
+            { nis: '13829', nama: 'MUHAMMAD ARIFAN NAWAL' },
+            { nis: '13830', nama: 'NI KADEK BELLA KANITHA DEWI' },
+            { nis: '13831', nama: 'NI KADEK DIAH ANANDANI' },
+            { nis: '13832', nama: 'NI KOMANG DEWI' },
+            { nis: '13833', nama: 'NI KOMANG TRIASIH' },
+            { nis: '13835', nama: 'NI MADE KIRANA MAHESUARI' },
+            { nis: '13836', nama: 'NI PUTU NAGITHA KIRANA PRAMESTI' },
+            { nis: '13837', nama: 'PUTU NOVARA KRISHNA MAHARA DUAJA' },
+            { nis: '13839', nama: 'ROQI AMIRULLOH' },
+            { nis: '13840', nama: 'ULIL ABSHOR' },
+            { nis: '13841', nama: 'VILLA JUNA BASTIAN' },
+            { nis: '13848', nama: 'LOVELY APRILIYANI' },
+            { nis: '14174', nama: 'DEA WAHYUNI' },
+            { nis: '14182', nama: 'PRINCES LEONA CALLYSTA' }
+        ];
+        /* ───────────────────────────────────────────────────────────
+           ▲▲▲  AKHIR DATA SISWA  ▲▲▲
+        ─────────────────────────────────────────────────────────── */
 
-<script>
-/* ───────────────────────────────────────────────────────────
-   ▼▼▼  DATA SISWA  ▼▼▼
-─────────────────────────────────────────────────────────── */
-const DATA_SISWA = [
-  { nis: '13640', nama: 'ADHAM AL-FAJRI WATARA' },
-  { nis: '13641', nama: 'AKHMAD SURYA RAJAWALI' },
-  { nis: '13642', nama: 'ANAK AGUNG AYU OKA SHINTA MAHARANI' },
-  { nis: '13643', nama: 'ANAK AGUNG PUTU RANU DHARMA PUTRA WIBAWA DWI DWIPA' },
-  { nis: '13644', nama: 'AULIA CAHYA MELANI' },
-  { nis: '13645', nama: 'BRIGITTA IMELDA FEBRIANI' },
-  { nis: '13646', nama: 'DAMAR PUTRA GUMILANG' },
-  { nis: '13647', nama: 'DEWA AYU CALLISTA WIDIANTARI' },
-  { nis: '13648', nama: 'DEWA MADE SAKTI PERDANA' },
-  { nis: '13649', nama: 'GERALDIN AUREL APRILLIA FEBRY AYUDHA' },
-  { nis: '13650', nama: 'I GUSTI NGURAH KOMANG KEVIN ARYA WIGUNA' },
-  { nis: '13651', nama: 'I KADEK BAYU DARMAYASA' },
-  { nis: '13652', nama: 'I WAYAN AGUS DWIPAYANA' },
-  { nis: '13653', nama: 'IDA AYU PUTU NISA ADNYA SARI' },
-  { nis: '13654', nama: 'I KADEK NOVA PRADITYA DHARMA PUTRA' },
-  { nis: '13655', nama: 'KOMANG AGUS KRISNA SETIAWAN' },
-  { nis: '13656', nama: 'KOMANG AYU SUKMA DEWI' },
-  { nis: '13657', nama: 'LEGISTA AGUNG PRAMESTI' },
-  { nis: '13658', nama: 'MADE MANIK PUTRAWAN' },
-  { nis: '13659', nama: 'MARKO SANAM' },
-  { nis: '13660', nama: 'MEILANIE YAHYA' },
-  { nis: '13661', nama: 'MOHAMMAD REVYANSYAH' },
-  { nis: '13662', nama: 'NI KOMANG AYU TRIASTUTI' },
-  { nis: '13663', nama: 'NI KOMANG BUNGA LESTARI' },
-  { nis: '13664', nama: 'NI LUH PUTU CINTA RAHAYU' },
-  { nis: '13665', nama: 'NI LUH TIKA APRILIANA' },
-  { nis: '13666', nama: 'NI MADE PRADNYA PARAMITHA DEWI' },
-  { nis: '13667', nama: 'NI PUTU KINAN DYANTARI' },
-  { nis: '13668', nama: 'NI PUTU NIA ANA TASYA DEWI' },
-  { nis: '13670', nama: 'OLIVIA GRESIA MORU MANEK' },
-  { nis: '13671', nama: 'PUTU ARTA WIADNYANA' },
-  { nis: '13672', nama: 'PUTU FORLAN KENCANA PUTRA' },
-  { nis: '13673', nama: 'PUTU KRISHNA OVARIANA' },
-  { nis: '13674', nama: 'PUTU RAMA NARYANA SUPUTRA PRAMANA' },
-  { nis: '13675', nama: 'PUTU TIKA PRATIWI' },
-  { nis: '13676', nama: 'PUTU WILLY ARIA ARTA' },
-  { nis: '13677', nama: 'RA. FAADHILAH SYAKIRA KHANIA ANJANI BC' },
-  { nis: '13678', nama: 'RADEN RORO PELANGI KIRANA JAYANTI' },
-  { nis: '13679', nama: 'RAVA ALRIZKY PRASSANDHY' },
-  { nis: '13680', nama: 'ANAK AGUNG AYU SRI MAS KRISNANTARI' },
-  { nis: '13681', nama: 'ANISA LIDYA LESTARI' },
-  { nis: '13682', nama: 'CHIKA RAMADHANI WIJAYANTI' },
-  { nis: '13683', nama: 'DIMAS ANGGA PURWANTO' },
-  { nis: '13685', nama: 'FEBRIYANI PUSPA PRATIWI' },
-  { nis: '13686', nama: 'I GEDE BAGUS KARTANA DIPUTRA' },
-  { nis: '13687', nama: 'I GEDE CAHYANA PUTRA' },
-  { nis: '13688', nama: 'I GEDE GALANG CITTA PRAASADA' },
-  { nis: '13689', nama: 'I KADEK AGUS PURNAWIRAWAN' },
-  { nis: '13690', nama: 'I KOMANG ANDIKA SAPUTRA' },
-  { nis: '13691', nama: 'I KOMANG ARYA VIDIANA KRISNA' },
-  { nis: '13692', nama: 'I NYOMAN DIVTHA PERMANA' },
-  { nis: '13693', nama: 'I PUTU ARYA SIVA BUDI KUSUMA' },
-  { nis: '13694', nama: 'ISNAILA STEFHANI' },
-  { nis: '13695', nama: 'KADEK DWI DHARMA RADITYA' },
-  { nis: '13696', nama: 'KADEK ISAKA SINTA PUSPA YANI' },
-  { nis: '13697', nama: 'KOMANG HARUM NINGSIH' },
-  { nis: '13698', nama: 'I KOMANG TANGKAS' },
-  { nis: '13699', nama: 'KOMANG TRISTAN BAYU SUARTAMA' },
-  { nis: '13700', nama: 'LUH PUTU DINDA MAHARANI' },
-  { nis: '13701', nama: 'MARCELLINO NICHOLAS RAHMAN' },
-  { nis: '13702', nama: 'NI GUSTI AGUNG RATIH PRADNYAWATI' },
-  { nis: '13703', nama: 'NI GUSTI SRI AGUNG INTAN WULANSARI' },
-  { nis: '13704', nama: 'NI KADEK OKTAVIANI' },
-  { nis: '13705', nama: 'NI KOMANG ANGGRENI' },
-  { nis: '13706', nama: 'NI KOMANG LASMINI' },
-  { nis: '13707', nama: 'NI LUH AYU OKTAVIANI PUTRI' },
-  { nis: '13708', nama: 'NI LUH LADYNA CANDITA DEWI' },
-  { nis: '13709', nama: 'NI MADE AYU ANGGANI' },
-  { nis: '13710', nama: 'NI MADE MEDY DWITA ANTARI' },
-  { nis: '13711', nama: 'NI PUTU ASHA DAMARA WIDIYANTI' },
-  { nis: '13712', nama: 'NUR AIDY FITROH' },
-  { nis: '13713', nama: 'OKTA VIANA KARTIKA' },
-  { nis: '13714', nama: 'PUTU AYU SERATI DEWI' },
-  { nis: '13715', nama: 'PUTU DARMA GHAURY DEWI' },
-  { nis: '13716', nama: 'PUTU GAURI CANDRA BERLIAN' },
-  { nis: '13717', nama: 'PUTU KIRANI CAHYANING PURNAMA' },
-  { nis: '13718', nama: 'RAMADHAN ZAKI ALDI YANTO' },
-  { nis: '13719', nama: 'RASELA WARDANI' },
-  { nis: '13720', nama: 'RAYYAN ABIMANYU BAEHAQI' },
-  { nis: '13721', nama: 'WIDIATUNNISA' },
-  { nis: '14177', nama: 'I KOMANG WAHYU JULIADI SAPUTRA' },
-  { nis: '13722', nama: 'ADI DHARMA PUTRA' },
-  { nis: '13724', nama: 'AGUS GANDHI SUGIANDIKA' },
-  { nis: '13725', nama: 'AGUS KADEK MORISKI ANGELO' },
-  { nis: '13727', nama: 'AURILLIA PUTRI RAMADANI' },
-  { nis: '13728', nama: 'AZAM ROMADHON' },
-  { nis: '13730', nama: 'GILANG DWI DERMAWAN' },
-  { nis: '13731', nama: 'GISA MARISKA ANJANI' },
-  { nis: '13732', nama: 'HANA L.KANA BR.SIMANJUNTAK' },
-  { nis: '13733', nama: 'I GEDE ARTA WIGUNA' },
-  { nis: '13734', nama: 'I GEDE PURNAMA PUTRA' },
-  { nis: '13735', nama: 'I KADEK OKTADINANTA SATRIA WIBAWA' },
-  { nis: '13736', nama: 'I KOMANG AGUS DANANJAYA' },
-  { nis: '13737', nama: 'I KOMANG DIKA SASTRAWAN' },
-  { nis: '13738', nama: 'I MADE ARTA JAYA KUSUMA' },
-  { nis: '13739', nama: 'I MADE OKTA ANGGARA PUTRA' },
-  { nis: '13740', nama: 'I NYOMAN VINO SATRIA PUTRA' },
-  { nis: '13741', nama: 'I PUTU GEDE SASTRAWAN' },
-  { nis: '13742', nama: 'I WAYAN ARIANA' },
-  { nis: '13743', nama: 'I WAYAN JATI ADITYA PARAMUDITA' },
-  { nis: '13744', nama: 'MUHAMMAD RIDWANULLAH ANNASYWAN' },
-  { nis: '13745', nama: 'MUHAMMAD ROFFIKI' },
-  { nis: '13746', nama: 'NATASYA ROSALINDA NADINE PANTUR' },
-  { nis: '13747', nama: 'NI KADEK DARMA AYU' },
-  { nis: '13748', nama: 'NI KADEK LINDA WARDANI' },
-  { nis: '13749', nama: 'NI KADEK SILA REGINA PUTRI' },
-  { nis: '13750', nama: 'NI KETUT WULANDINI' },
-  { nis: '13751', nama: 'NI KOMANG PUTRI PERMATA DEWI' },
-  { nis: '13752', nama: 'NI LUH PUTU DARMAYANTI' },
-  { nis: '13753', nama: 'NI MADE NOVITA ARIANDANI' },
-  { nis: '13754', nama: 'NI PUTU SRI AYU PUTRI ESTYANTI' },
-  { nis: '13755', nama: 'PUTU DESTA MAHARDIKA' },
-  { nis: '13756', nama: 'PUTU PRAYANA WIBAWA PUTRA' },
-  { nis: '13757', nama: 'RIANDY IZRAFIL YANSYA' },
-  { nis: '13758', nama: 'SOFIA ANA SETASIA' },
-  { nis: '13759', nama: 'SULIS APRILIA' },
-  { nis: '13760', nama: 'TANIA INDAH PRADINI' },
-  { nis: '13761', nama: 'WINDY MOURELIA PUTRI' },
-  { nis: '13762', nama: 'WISNU MAULANA AKBAR' },
-  { nis: '13763', nama: 'ZAHRA PUTRI DEWI' },
-  { nis: '13764', nama: 'ANAK AGUNG MADE AYU SRI WULAN TARI' },
-  { nis: '13765', nama: 'ASHYFA KHAIRANY SOFYAN' },
-  { nis: '13766', nama: 'FELISIA SANTIKA LIDEVI' },
-  { nis: '13767', nama: 'FIRA ALUNA SACHI RAMADHANI' },
-  { nis: '13768', nama: 'GEDE JOSSE RADITYA' },
-  { nis: '13769', nama: 'GEDE RADITYA MAHARDIKA PUTRA' },
-  { nis: '13770', nama: 'GEDE WISNU MAHARTA' },
-  { nis: '13771', nama: 'GUSTI AYU MAS ALIKA PRABHASWARI' },
-  { nis: '13772', nama: 'HAPPY ELLIANA ONK' },
-  { nis: '13773', nama: 'I GUSTI NGURAH RANGGA DWIPAYANA PUTRA' },
-  { nis: '13774', nama: 'KADEK ANTON WIRAWAN WASTIKA' },
-  { nis: '13775', nama: 'I KADEK DODI ARDYAN' },
-  { nis: '13776', nama: 'I KADEK SASTRA WIGUNA' },
-  { nis: '13777', nama: 'I KOMANG DHIMAS PRADNYANA' },
-  { nis: '13778', nama: 'I MADE ARSHAKA RAMA VEDANTHA' },
-  { nis: '13779', nama: 'I WAYAN ZU RAVA DHARMA' },
-  { nis: '13780', nama: 'IDA BAGUS DIRGAYUSA' },
-  { nis: '13781', nama: 'IDA BAGUS WIJAYA KESUMA GIRI' },
-  { nis: '13782', nama: 'JIHANIS DWI JAYANTI' },
-  { nis: '13783', nama: 'KOMANG MAHESA PUTRA' },
-  { nis: '13784', nama: 'KOMANG MITHA ANGELICA PUTRI' },
-  { nis: '13786', nama: 'MADEIRA PRINCE MARIAWAN' },
-  { nis: '13787', nama: 'MAULANA AKBAR PANGESTU' },
-  { nis: '13788', nama: 'MUHAMMAD FADIL AL ZAKY' },
-  { nis: '13789', nama: 'NI KETUT MEI SRI ANDAYANI' },
-  { nis: '13790', nama: 'NI KETUT NAYLA SANTI DEWI' },
-  { nis: '13791', nama: 'PUTU AIRIN CHRISTIANI' },
-  { nis: '13792', nama: 'NI PUTU LINA LETISIA DEWI' },
-  { nis: '13793', nama: 'NI PUTU NITA NINGSIH' },
-  { nis: '13794', nama: 'NI PUTU SINTYA DEWI' },
-  { nis: '13795', nama: 'NI WAYAN CHARLENE SUDARMA' },
-  { nis: '13796', nama: 'PUTU RANGGA DWI GUNA KRISNA PRATAMA' },
-  { nis: '13797', nama: 'RANGGA DARMA PUTRA' },
-  { nis: '13798', nama: 'REISYA JUNIA DEWI' },
-  { nis: '13799', nama: 'RIZKY YEWON NAHAK' },
-  { nis: '13800', nama: 'ROSEMARY ELLA GRACIA' },
-  { nis: '13801', nama: 'SALSABIL QISMIKA FARAH YUHAN' },
-  { nis: '13842', nama: 'KOMING SATRIA WIBAWA' },
-  { nis: '13843', nama: 'REVAN CAHYA ARSYLA' },
-  { nis: '14173', nama: 'NAUFAL AULIA ARTHA SUJATMIKO' },
-  { nis: '13802', nama: 'ANAK AGUNG KETUT WIJAYA PUTRA' },
-  { nis: '13803', nama: 'ANDHIKA NAUFAL AS SHIDDIQI' },
-  { nis: '13804', nama: 'DEWA AYU PURNAMA DEWI' },
-  { nis: '13805', nama: 'ELVINO AJI PRATAMA' },
-  { nis: '13807', nama: 'I DEWA GEDE SATRIA MAHESA CHRISNA' },
-  { nis: '13808', nama: 'I GEDE ADHI SEDANA YOGA KERTHA PUTRA PRATAMA' },
-  { nis: '13809', nama: 'I GEDE EDWIN SAPUTRA' },
-  { nis: '13810', nama: 'I GEDE PUJA' },
-  { nis: '13811', nama: 'I GUSTI AGUNG SUMERTA WIDNYANA' },
-  { nis: '13812', nama: 'I KADEK ANANDA ATMA DEVA' },
-  { nis: '13814', nama: 'I KADEK DWI ARTHA WIGUNA' },
-  { nis: '13815', nama: 'I KADEK PASEK WIDNYANA' },
-  { nis: '13816', nama: 'I KADEK WIRAGUNA' },
-  { nis: '13818', nama: 'I KOMANG ADITYA PRAMANA' },
-  { nis: '13819', nama: 'I KOMANG MAESSA MULIAWAN' },
-  { nis: '13820', nama: 'I MADE AGASTYA JUNA WIJAYA' },
-  { nis: '13821', nama: 'I MADE GALANG WINA YAKA' },
-  { nis: '13822', nama: 'I PUTU PUTRA AGUS ARI GUNAWAN' },
-  { nis: '13823', nama: 'KADEK DIMAS WIDHIA MERTA' },
-  { nis: '13824', nama: 'KADEK TASYA AGUSTINI' },
-  { nis: '13825', nama: 'KETUT BAGUS RISKI GITA CAHYAWAN' },
-  { nis: '13826', nama: 'KOMANG ARINSATI DARMA' },
-  { nis: '13827', nama: 'KOMANG SATRIA BHUWANA NUGRAHA' },
-  { nis: '13828', nama: 'KSATRIA ARKHAN ATHAYA FADILLAH' },
-  { nis: '13829', nama: 'MUHAMMAD ARIFAN NAWAL' },
-  { nis: '13830', nama: 'NI KADEK BELLA KANITHA DEWI' },
-  { nis: '13831', nama: 'NI KADEK DIAH ANANDANI' },
-  { nis: '13832', nama: 'NI KOMANG DEWI' },
-  { nis: '13833', nama: 'NI KOMANG TRIASIH' },
-  { nis: '13835', nama: 'NI MADE KIRANA MAHESUARI' },
-  { nis: '13836', nama: 'NI PUTU NAGITHA KIRANA PRAMESTI' },
-  { nis: '13837', nama: 'PUTU NOVARA KRISHNA MAHARA DUAJA' },
-  { nis: '13839', nama: 'ROQI AMIRULLOH' },
-  { nis: '13840', nama: 'ULIL ABSHOR' },
-  { nis: '13841', nama: 'VILLA JUNA BASTIAN' },
-  { nis: '13848', nama: 'LOVELY APRILIYANI' },
-  { nis: '14174', nama: 'DEA WAHYUNI' },
-  { nis: '14182', nama: 'PRINCES LEONA CALLYSTA' }
-];
-/* ───────────────────────────────────────────────────────────
-   ▲▲▲  AKHIR DATA SISWA  ▲▲▲
-─────────────────────────────────────────────────────────── */
+        const SCHOOL_SVGS = [
+            `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="4" width="22" height="6" rx="1" stroke="#c9a84c" stroke-width="1.2" fill="none"/><rect x="7" y="10" width="22" height="18" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M7 28 L18 34 L29 28" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="14" y1="10" x2="14" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="22" y1="10" x2="22" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
+            `<svg width="38" height="32" viewBox="0 0 38 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4 Q3 2 5 2 H18 V30 H5 Q3 30 3 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M35 4 Q35 2 33 2 H20 V30 H33 Q35 30 35 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="18" y1="2" x2="20" y2="2" stroke="#c9a84c" stroke-width="1.5"/><line x1="18" y1="30" x2="20" y2="30" stroke="#c9a84c" stroke-width="1.5"/><line x1="7" y1="8" x2="16" y2="8" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="12" x2="16" y2="12" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="16" x2="16" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
+            `<svg width="44" height="18" viewBox="0 0 44 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="42" height="16" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="8"  y1="1" x2="8"  y2="8" stroke="#c9a84c" stroke-width="1"/><line x1="15" y1="1" x2="15" y2="10" stroke="#c9a84c" stroke-width="1"/><line x1="22" y1="1" x2="22" y2="8" stroke="#c9a84c" stroke-width="1"/><line x1="29" y1="1" x2="29" y2="10" stroke="#c9a84c" stroke-width="1"/><line x1="36" y1="1" x2="36" y2="8" stroke="#c9a84c" stroke-width="1"/></svg>`,
+            `<svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="20,2 38,11 20,20 2,11" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M10 16 V24 Q20 28 30 24 V16" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="38" y1="11" x2="38" y2="22" stroke="#c9a84c" stroke-width="1.2"/><circle cx="38" cy="23" r="2" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>`,
+            `<svg width="10" height="44" viewBox="0 0 10 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="6" height="30" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M2 32 L5 42 L8 32" stroke="#c9a84c" stroke-width="1.2" fill="none"/><rect x="1" y="4" width="8" height="4" stroke="#c9a84c" stroke-width="0.8" opacity="0.4" fill="none"/></svg>`,
+            `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="16,2 19.5,12 30,12 21.5,18.5 25,29 16,22.5 7,29 10.5,18.5 2,12 12.5,12" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>`,
+            `<svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 H18 L26 10 V34 Q26 35 25 35 H3 Q2 35 2 34 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M18 2 V10 H26" stroke="#c9a84c" stroke-width="1" fill="none"/><line x1="7" y1="16" x2="21" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="21" x2="21" y2="21" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="26" x2="16" y2="26" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
+            `<svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="8" r="5" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="13" y1="12" x2="4" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="12" x2="28" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/><line x1="9" y1="24" x2="23" y2="24" stroke="#c9a84c" stroke-width="0.8" stroke-dasharray="2 2"/></svg>`,
+        ];
 
-const SCHOOL_SVGS = [
-  `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="4" width="22" height="6" rx="1" stroke="#c9a84c" stroke-width="1.2" fill="none"/><rect x="7" y="10" width="22" height="18" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M7 28 L18 34 L29 28" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="14" y1="10" x2="14" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="22" y1="10" x2="22" y2="28" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
-  `<svg width="38" height="32" viewBox="0 0 38 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4 Q3 2 5 2 H18 V30 H5 Q3 30 3 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M35 4 Q35 2 33 2 H20 V30 H33 Q35 30 35 28 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="18" y1="2" x2="20" y2="2" stroke="#c9a84c" stroke-width="1.5"/><line x1="18" y1="30" x2="20" y2="30" stroke="#c9a84c" stroke-width="1.5"/><line x1="7" y1="8" x2="16" y2="8" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="12" x2="16" y2="12" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="16" x2="16" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
-  `<svg width="44" height="18" viewBox="0 0 44 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="42" height="16" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="8"  y1="1" x2="8"  y2="8" stroke="#c9a84c" stroke-width="1"/><line x1="15" y1="1" x2="15" y2="10" stroke="#c9a84c" stroke-width="1"/><line x1="22" y1="1" x2="22" y2="8" stroke="#c9a84c" stroke-width="1"/><line x1="29" y1="1" x2="29" y2="10" stroke="#c9a84c" stroke-width="1"/><line x1="36" y1="1" x2="36" y2="8" stroke="#c9a84c" stroke-width="1"/></svg>`,
-  `<svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="20,2 38,11 20,20 2,11" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M10 16 V24 Q20 28 30 24 V16" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="38" y1="11" x2="38" y2="22" stroke="#c9a84c" stroke-width="1.2"/><circle cx="38" cy="23" r="2" stroke="#c9a84c" stroke-width="1" fill="none"/></svg>`,
-  `<svg width="10" height="44" viewBox="0 0 10 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="6" height="30" rx="2" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M2 32 L5 42 L8 32" stroke="#c9a84c" stroke-width="1.2" fill="none"/><rect x="1" y="4" width="8" height="4" stroke="#c9a84c" stroke-width="0.8" opacity="0.4" fill="none"/></svg>`,
-  `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="16,2 19.5,12 30,12 21.5,18.5 25,29 16,22.5 7,29 10.5,18.5 2,12 12.5,12" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>`,
-  `<svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 H18 L26 10 V34 Q26 35 25 35 H3 Q2 35 2 34 Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/><path d="M18 2 V10 H26" stroke="#c9a84c" stroke-width="1" fill="none"/><line x1="7" y1="16" x2="21" y2="16" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="21" x2="21" y2="21" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/><line x1="7" y1="26" x2="16" y2="26" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/></svg>`,
-  `<svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="8" r="5" stroke="#c9a84c" stroke-width="1.2" fill="none"/><line x1="13" y1="12" x2="4" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="12" x2="28" y2="36" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/><line x1="9" y1="24" x2="23" y2="24" stroke="#c9a84c" stroke-width="0.8" stroke-dasharray="2 2"/></svg>`,
-];
+        function initFloatingItems() {
+            const bg = document.getElementById('schoolBg');
+            const items = [
+                { svg: 0, x: 5, y: 8, dur: 14, del: 0, op: 0.09, r0: '-15deg', r1: '10deg', dy: '-25px' },
+                { svg: 1, x: 75, y: 5, dur: 16, del: 2, op: 0.08, r0: '10deg', r1: '-8deg', dy: '-30px' },
+                { svg: 2, x: 55, y: 15, dur: 18, del: 4, op: 0.07, r0: '-8deg', r1: '12deg', dy: '-20px' },
+                { svg: 3, x: 8, y: 35, dur: 12, del: 1, op: 0.10, r0: '20deg', r1: '-5deg', dy: '-35px' },
+                { svg: 4, x: 85, y: 30, dur: 15, del: 3, op: 0.09, r0: '-12deg', r1: '18deg', dy: '-28px' },
+                { svg: 5, x: 30, y: 60, dur: 20, del: 6, op: 0.08, r0: '5deg', r1: '-10deg', dy: '-22px' },
+                { svg: 6, x: 70, y: 55, dur: 13, del: 0.5, op: 0.09, r0: '-18deg', r1: '8deg', dy: '-32px' },
+                { svg: 7, x: 15, y: 70, dur: 17, del: 5, op: 0.07, r0: '15deg', r1: '-12deg', dy: '-18px' },
+                { svg: 0, x: 80, y: 75, dur: 14, del: 7, op: 0.08, r0: '-5deg', r1: '15deg', dy: '-24px' },
+                { svg: 1, x: 45, y: 82, dur: 19, del: 2.5, op: 0.07, r0: '8deg', r1: '-15deg', dy: '-28px' },
+                { svg: 3, x: 55, y: 42, dur: 11, del: 8, op: 0.08, r0: '-20deg', r1: '5deg', dy: '-20px' },
+                { svg: 5, x: 20, y: 88, dur: 16, del: 3.5, op: 0.09, r0: '12deg', r1: '-8deg', dy: '-26px' },
+            ];
 
-function initFloatingItems() {
-  const bg = document.getElementById('schoolBg');
-  const items = [
-    { svg: 0, x: 5,  y: 8,  dur: 14, del: 0,   op: 0.09, r0: '-15deg', r1: '10deg',  dy: '-25px' },
-    { svg: 1, x: 75, y: 5,  dur: 16, del: 2,   op: 0.08, r0: '10deg',  r1: '-8deg',  dy: '-30px' },
-    { svg: 2, x: 55, y: 15, dur: 18, del: 4,   op: 0.07, r0: '-8deg',  r1: '12deg',  dy: '-20px' },
-    { svg: 3, x: 8,  y: 35, dur: 12, del: 1,   op: 0.10, r0: '20deg',  r1: '-5deg',  dy: '-35px' },
-    { svg: 4, x: 85, y: 30, dur: 15, del: 3,   op: 0.09, r0: '-12deg', r1: '18deg',  dy: '-28px' },
-    { svg: 5, x: 30, y: 60, dur: 20, del: 6,   op: 0.08, r0: '5deg',   r1: '-10deg', dy: '-22px' },
-    { svg: 6, x: 70, y: 55, dur: 13, del: 0.5, op: 0.09, r0: '-18deg', r1: '8deg',   dy: '-32px' },
-    { svg: 7, x: 15, y: 70, dur: 17, del: 5,   op: 0.07, r0: '15deg',  r1: '-12deg', dy: '-18px' },
-    { svg: 0, x: 80, y: 75, dur: 14, del: 7,   op: 0.08, r0: '-5deg',  r1: '15deg',  dy: '-24px' },
-    { svg: 1, x: 45, y: 82, dur: 19, del: 2.5, op: 0.07, r0: '8deg',   r1: '-15deg', dy: '-28px' },
-    { svg: 3, x: 55, y: 42, dur: 11, del: 8,   op: 0.08, r0: '-20deg', r1: '5deg',   dy: '-20px' },
-    { svg: 5, x: 20, y: 88, dur: 16, del: 3.5, op: 0.09, r0: '12deg',  r1: '-8deg',  dy: '-26px' },
-  ];
-
-  items.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'float-item';
-    div.style.cssText = `left: ${item.x}%; top: ${item.y}%; --dur: ${item.dur}s; --delay: ${item.del}s; --op: ${item.op}; --r0: ${item.r0}; --r1: ${item.r1}; --dy: ${item.dy};`;
-    div.innerHTML = SCHOOL_SVGS[item.svg];
-    bg.appendChild(div);
-  });
-}
-
-/* ── PAGE STATE ──────────────────────────────────────────── */
-let cur = 0;
-const pageCount = 3;
-
-/* ── NAVIGASI LOGIC & SCROLL DETECT ─── */
-function initScrollDetect() {
-  [0, 1].forEach(index => {
-    const p = document.getElementById('p' + index);
-    const btn = document.getElementById('btnNext' + index);
-    if(p && btn) {
-      const checkScroll = () => {
-        if (p.scrollTop + p.clientHeight >= p.scrollHeight - 40) {
-          btn.classList.add('show-btn');
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'float-item';
+                div.style.cssText = `left: ${item.x}%; top: ${item.y}%; --dur: ${item.dur}s; --delay: ${item.del}s; --op: ${item.op}; --r0: ${item.r0}; --r1: ${item.r1}; --dy: ${item.dy};`;
+                div.innerHTML = SCHOOL_SVGS[item.svg];
+                bg.appendChild(div);
+            });
         }
-      };
-      p.addEventListener('scroll', checkScroll);
-      // Cek langsung saat load
-      setTimeout(checkScroll, 500);
-    }
-  });
-}
 
-function goTo(n) {
-  if (n < 0 || n >= pageCount || n === cur) return;
-  const prev = document.getElementById('p' + cur);
-  const next = document.getElementById('p' + n);
-  const dots  = document.querySelectorAll('.dot');
+        /* ── PAGE STATE ──────────────────────────────────────────── */
+        let cur = 0;
+        const pageCount = 3;
 
-  prev.classList.remove('active');
-  prev.classList.add('exit-left');
-  setTimeout(() => prev.classList.remove('exit-left'), 450);
+        /* ── NAVIGASI LOGIC & SCROLL DETECT ─── */
+        function initScrollDetect() {
+            [0, 1].forEach(index => {
+                const p = document.getElementById('p' + index);
+                const btn = document.getElementById('btnNext' + index);
+                if (p && btn) {
+                    const checkScroll = () => {
+                        if (p.scrollTop + p.clientHeight >= p.scrollHeight - 40) {
+                            btn.classList.add('show-btn');
+                        }
+                    };
+                    p.addEventListener('scroll', checkScroll);
+                    // Cek langsung saat load
+                    setTimeout(checkScroll, 500);
+                }
+            });
+        }
 
-  next.style.transform = 'translateX(40px)';
-  next.style.opacity = '0';
-  next.classList.add('active');
-  requestAnimationFrame(() => {
-    next.style.transition = 'opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1)';
-    next.style.transform = '';
-    next.style.opacity = '';
-  });
+        function goTo(n) {
+            if (n < 0 || n >= pageCount || n === cur) return;
+            const prev = document.getElementById('p' + cur);
+            const next = document.getElementById('p' + n);
+            const dots = document.querySelectorAll('.dot');
 
-  cur = n;
-  dots.forEach((d, i) => d.classList.toggle('active', i === cur));
-}
-function nextPage() { goTo(cur + 1); }
+            prev.classList.remove('active');
+            prev.classList.add('exit-left');
+            setTimeout(() => prev.classList.remove('exit-left'), 450);
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+            next.style.transform = 'translateX(40px)';
+            next.style.opacity = '0';
+            next.classList.add('active');
+            requestAnimationFrame(() => {
+                next.style.transition = 'opacity 0.45s ease, transform 0.45s cubic-bezier(.25,.8,.25,1)';
+                next.style.transform = '';
+                next.style.opacity = '';
+            });
 
-let audioCtx = null;
-function getAudioCtx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  return audioCtx;
-}
+            cur = n;
+            dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+        }
+        function nextPage() { goTo(cur + 1); }
 
-function playTone(freq, startTime, duration, vol = 0.3, type = 'sine') {
-  const ctx = getAudioCtx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, startTime);
-  gain.gain.setValueAtTime(0, startTime);
-  gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(startTime);
-  osc.stop(startTime + duration + 0.1);
-}
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function playSuspenseSound() {
-  try {
-    const ctx = getAudioCtx();
-    const now = ctx.currentTime;
-    [80, 85, 90, 95, 100].forEach((freq, i) => {
-      playTone(freq, now + i * 0.3, 0.5, 0.15, 'sawtooth');
-    });
-    playTone(440, now + 1.6, 0.8, 0.05, 'sine');
-  } catch(e) {}
-}
+        let audioCtx = null;
+        function getAudioCtx() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
 
-function playVictoryFanfare() {
-  try {
-    const ctx = getAudioCtx();
-    const now = ctx.currentTime;
-    const notes = [
-      { f: 523.25, t: 0,    d: 0.15, v: 0.4 }, { f: 523.25, t: 0.12, d: 0.15, v: 0.4 },
-      { f: 523.25, t: 0.24, d: 0.15, v: 0.4 }, { f: 415.30, t: 0.24, d: 0.15, v: 0.2 },
-      { f: 659.25, t: 0.38, d: 0.55, v: 0.45 }, { f: 523.25, t: 0.38, d: 0.55, v: 0.2 },
-      { f: 587.33, t: 0.95, d: 0.18, v: 0.4 }, { f: 659.25, t: 1.15, d: 0.18, v: 0.45 },
-      { f: 783.99, t: 1.35, d: 0.8,  v: 0.5, type: 'triangle' }, { f: 659.25, t: 1.35, d: 0.8,  v: 0.2 },
-      { f: 523.25, t: 1.35, d: 0.8,  v: 0.15 }, { f: 1046.5, t: 2.15, d: 1.2, v: 0.3 },
-      { f:  783.99, t: 2.15, d: 1.2, v: 0.25 }, { f:  659.25, t: 2.15, d: 1.2, v: 0.2 },
-      { f:  523.25, t: 2.15, d: 1.2, v: 0.2 },
-    ];
-    notes.forEach(n => playTone(n.f, now + n.t, n.d, n.v, n.type || 'sine'));
-    [2093, 2637, 3136].forEach((f, i) => {
-      playTone(f, now + 2.15 + i * 0.08, 0.8, 0.08, 'sine');
-    });
-  } catch(e) {}
-}
+        function playTone(freq, startTime, duration, vol = 0.3, type = 'sine') {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, startTime);
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(startTime);
+            osc.stop(startTime + duration + 0.1);
+        }
 
-let confettiParticles = [];
-let confettiRunning = false;
-let confettiCanvas, confettiCtx;
+        function playSuspenseSound() {
+            try {
+                const ctx = getAudioCtx();
+                const now = ctx.currentTime;
+                [80, 85, 90, 95, 100].forEach((freq, i) => {
+                    playTone(freq, now + i * 0.3, 0.5, 0.15, 'sawtooth');
+                });
+                playTone(440, now + 1.6, 0.8, 0.05, 'sine');
+            } catch (e) { }
+        }
 
-function initConfettiCanvas() {
-  confettiCanvas = document.getElementById('confetti-canvas');
-  confettiCtx = confettiCanvas.getContext('2d');
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
+        function playVictoryFanfare() {
+            try {
+                const ctx = getAudioCtx();
+                const now = ctx.currentTime;
+                const notes = [
+                    { f: 523.25, t: 0, d: 0.15, v: 0.4 }, { f: 523.25, t: 0.12, d: 0.15, v: 0.4 },
+                    { f: 523.25, t: 0.24, d: 0.15, v: 0.4 }, { f: 415.30, t: 0.24, d: 0.15, v: 0.2 },
+                    { f: 659.25, t: 0.38, d: 0.55, v: 0.45 }, { f: 523.25, t: 0.38, d: 0.55, v: 0.2 },
+                    { f: 587.33, t: 0.95, d: 0.18, v: 0.4 }, { f: 659.25, t: 1.15, d: 0.18, v: 0.45 },
+                    { f: 783.99, t: 1.35, d: 0.8, v: 0.5, type: 'triangle' }, { f: 659.25, t: 1.35, d: 0.8, v: 0.2 },
+                    { f: 523.25, t: 1.35, d: 0.8, v: 0.15 }, { f: 1046.5, t: 2.15, d: 1.2, v: 0.3 },
+                    { f: 783.99, t: 2.15, d: 1.2, v: 0.25 }, { f: 659.25, t: 2.15, d: 1.2, v: 0.2 },
+                    { f: 523.25, t: 2.15, d: 1.2, v: 0.2 },
+                ];
+                notes.forEach(n => playTone(n.f, now + n.t, n.d, n.v, n.type || 'sine'));
+                [2093, 2637, 3136].forEach((f, i) => {
+                    playTone(f, now + 2.15 + i * 0.08, 0.8, 0.08, 'sine');
+                });
+            } catch (e) { }
+        }
 
-function launchConfetti() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-  confettiParticles = [];
-  confettiRunning = true;
+        let confettiParticles = [];
+        let confettiRunning = false;
+        let confettiCanvas, confettiCtx;
 
-  const colors = ['#c9a84c','#e8c96c','#f5e0a0','#6ee7a0','#7eb8f7','#f9a8d4','#fbbf24','#34d399','#60a5fa','#f472b6','#fff'];
-  const cx = window.innerWidth / 2;
-  const launchPoints = [
-    { x: cx, y: window.innerHeight * 0.6 },
-    { x: cx * 0.3, y: window.innerHeight * 0.8 },
-    { x: cx * 1.7, y: window.innerHeight * 0.8 },
-    { x: cx * 0.6, y: window.innerHeight },
-    { x: cx * 1.4, y: window.innerHeight },
-  ];
+        function initConfettiCanvas() {
+            confettiCanvas = document.getElementById('confetti-canvas');
+            confettiCtx = confettiCanvas.getContext('2d');
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
 
-  launchPoints.forEach((lp, li) => {
-    const count = li === 0 ? 120 : 60;
-    const delay = li * 180;
-    setTimeout(() => {
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 * i / count) - Math.PI / 2 + (Math.random() - 0.5) * 1.2;
-        const speed = 6 + Math.random() * 14;
-        confettiParticles.push({
-          x: lp.x, y: lp.y,
-          vx: Math.cos(angle) * speed * (0.5 + Math.random() * 0.5),
-          vy: Math.sin(angle) * speed - (li === 0 ? 8 : 4),
-          color: colors[Math.floor(Math.random() * colors.length)],
-          size: 5 + Math.random() * 8,
-          rotation: Math.random() * Math.PI * 2,
-          rotSpeed: (Math.random() - 0.5) * 0.3,
-          shape: Math.random() > 0.5 ? 'rect' : 'circle',
-          alpha: 1,
-          gravity: 0.25 + Math.random() * 0.15,
-          life: 1,
-        });
-      }
-    }, delay);
-  });
+        function launchConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            confettiParticles = [];
+            confettiRunning = true;
 
-  confettiRunning = true;
-  requestAnimationFrame(animateConfetti);
-  setTimeout(() => { confettiRunning = false; }, 5000);
-}
+            const colors = ['#c9a84c', '#e8c96c', '#f5e0a0', '#6ee7a0', '#7eb8f7', '#f9a8d4', '#fbbf24', '#34d399', '#60a5fa', '#f472b6', '#fff'];
+            const cx = window.innerWidth / 2;
+            const launchPoints = [
+                { x: cx, y: window.innerHeight * 0.6 },
+                { x: cx * 0.3, y: window.innerHeight * 0.8 },
+                { x: cx * 1.7, y: window.innerHeight * 0.8 },
+                { x: cx * 0.6, y: window.innerHeight },
+                { x: cx * 1.4, y: window.innerHeight },
+            ];
 
-function animateConfetti() {
-  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  confettiParticles = confettiParticles.filter(p => p.alpha > 0.01);
+            launchPoints.forEach((lp, li) => {
+                const count = li === 0 ? 120 : 60;
+                const delay = li * 180;
+                setTimeout(() => {
+                    for (let i = 0; i < count; i++) {
+                        const angle = (Math.PI * 2 * i / count) - Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+                        const speed = 6 + Math.random() * 14;
+                        confettiParticles.push({
+                            x: lp.x, y: lp.y,
+                            vx: Math.cos(angle) * speed * (0.5 + Math.random() * 0.5),
+                            vy: Math.sin(angle) * speed - (li === 0 ? 8 : 4),
+                            color: colors[Math.floor(Math.random() * colors.length)],
+                            size: 5 + Math.random() * 8,
+                            rotation: Math.random() * Math.PI * 2,
+                            rotSpeed: (Math.random() - 0.5) * 0.3,
+                            shape: Math.random() > 0.5 ? 'rect' : 'circle',
+                            alpha: 1,
+                            gravity: 0.25 + Math.random() * 0.15,
+                            life: 1,
+                        });
+                    }
+                }, delay);
+            });
 
-  confettiParticles.forEach(p => {
-    p.vy += p.gravity; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.rotation += p.rotSpeed;
-    if (p.y > confettiCanvas.height * 0.7) p.alpha -= 0.012;
+            confettiRunning = true;
+            requestAnimationFrame(animateConfetti);
+            setTimeout(() => { confettiRunning = false; }, 5000);
+        }
 
-    confettiCtx.save();
-    confettiCtx.globalAlpha = p.alpha;
-    confettiCtx.translate(p.x, p.y);
-    confettiCtx.rotate(p.rotation);
-    confettiCtx.fillStyle = p.color;
-    if (p.shape === 'rect') {
-      confettiCtx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
-    } else {
-      confettiCtx.beginPath();
-      confettiCtx.arc(0, 0, p.size/2, 0, Math.PI*2);
-      confettiCtx.fill();
-    }
-    confettiCtx.restore();
-  });
+        function animateConfetti() {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles = confettiParticles.filter(p => p.alpha > 0.01);
 
-  if (confettiRunning || confettiParticles.length > 0) {
-    requestAnimationFrame(animateConfetti);
-  } else {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  }
-}
+            confettiParticles.forEach(p => {
+                p.vy += p.gravity; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.rotation += p.rotSpeed;
+                if (p.y > confettiCanvas.height * 0.7) p.alpha -= 0.012;
 
-function launchFireworks() {
-  const colors = ['#c9a84c','#e8c96c','#6ee7a0','#7eb8f7','#f9a8d4','#fbbf24'];
-  const wrapper = document.getElementById('app-wrapper');
-  const rect = wrapper.getBoundingClientRect();
-  
-  const positions = [
-    { x: rect.left + rect.width * 0.25, y: rect.top + rect.height * 0.35 },
-    { x: rect.left + rect.width * 0.75, y: rect.top + rect.height * 0.30 },
-    { x: rect.left + rect.width * 0.50, y: rect.top + rect.height * 0.20 },
-    { x: rect.left + rect.width * 0.15, y: rect.top + rect.height * 0.55 },
-    { x: rect.left + rect.width * 0.85, y: rect.top + rect.height * 0.50 },
-  ];
+                confettiCtx.save();
+                confettiCtx.globalAlpha = p.alpha;
+                confettiCtx.translate(p.x, p.y);
+                confettiCtx.rotate(p.rotation);
+                confettiCtx.fillStyle = p.color;
+                if (p.shape === 'rect') {
+                    confettiCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+                } else {
+                    confettiCtx.beginPath();
+                    confettiCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                    confettiCtx.fill();
+                }
+                confettiCtx.restore();
+            });
 
-  positions.forEach((pos, i) => {
-    setTimeout(() => {
-      const fw = document.createElement('div');
-      fw.className = 'firework';
-      fw.style.cssText = `left:${pos.x}px; top:${pos.y}px;`;
+            if (confettiRunning || confettiParticles.length > 0) {
+                requestAnimationFrame(animateConfetti);
+            } else {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            }
+        }
 
-      const particleCount = 24;
-      for (let j = 0; j < particleCount; j++) {
-        const angle = (Math.PI * 2 * j / particleCount);
-        const distance = 50 + Math.random() * 60;
-        const tx = Math.cos(angle) * distance;
-        const ty = Math.sin(angle) * distance;
-        const p = document.createElement('div');
-        p.className = 'firework-particle';
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const size = 3 + Math.random() * 4;
-        p.style.cssText = `
+        function launchFireworks() {
+            const colors = ['#c9a84c', '#e8c96c', '#6ee7a0', '#7eb8f7', '#f9a8d4', '#fbbf24'];
+            const wrapper = document.getElementById('app-wrapper');
+            const rect = wrapper.getBoundingClientRect();
+
+            const positions = [
+                { x: rect.left + rect.width * 0.25, y: rect.top + rect.height * 0.35 },
+                { x: rect.left + rect.width * 0.75, y: rect.top + rect.height * 0.30 },
+                { x: rect.left + rect.width * 0.50, y: rect.top + rect.height * 0.20 },
+                { x: rect.left + rect.width * 0.15, y: rect.top + rect.height * 0.55 },
+                { x: rect.left + rect.width * 0.85, y: rect.top + rect.height * 0.50 },
+            ];
+
+            positions.forEach((pos, i) => {
+                setTimeout(() => {
+                    const fw = document.createElement('div');
+                    fw.className = 'firework';
+                    fw.style.cssText = `left:${pos.x}px; top:${pos.y}px;`;
+
+                    const particleCount = 24;
+                    for (let j = 0; j < particleCount; j++) {
+                        const angle = (Math.PI * 2 * j / particleCount);
+                        const distance = 50 + Math.random() * 60;
+                        const tx = Math.cos(angle) * distance;
+                        const ty = Math.sin(angle) * distance;
+                        const p = document.createElement('div');
+                        p.className = 'firework-particle';
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        const size = 3 + Math.random() * 4;
+                        p.style.cssText = `
           background:${color}; width:${size}px; height:${size}px; border-radius:50%;
           --tx:${tx}px; --ty:${ty}px; --dur:${0.7 + Math.random() * 0.5}s; --del:0s;
-          left:0; top:0; margin-left:-${size/2}px; margin-top:-${size/2}px;
+          left:0; top:0; margin-left:-${size / 2}px; margin-top:-${size / 2}px;
         `;
-        fw.appendChild(p);
-      }
+                        fw.appendChild(p);
+                    }
 
-      document.body.appendChild(fw);
-      setTimeout(() => fw.remove(), 1500);
-    }, i * 250 + 300);
-  });
-}
+                    document.body.appendChild(fw);
+                    setTimeout(() => fw.remove(), 1500);
+                }, i * 250 + 300);
+            });
+        }
 
-async function cekKelulusan() {
-  const nis    = document.getElementById('nisInput').value.trim();
-  const nama   = document.getElementById('namaInput').value.trim().toUpperCase();
-  const errBox = document.getElementById('errBox');
-  const btn    = document.getElementById('btnCheck');
-  errBox.innerHTML = '';
+        async function cekKelulusan() {
+            const nis = document.getElementById('nisInput').value.trim();
+            const nama = document.getElementById('namaInput').value.trim().toUpperCase();
+            const errBox = document.getElementById('errBox');
+            const btn = document.getElementById('btnCheck');
+            errBox.innerHTML = '';
 
-  if (!nis || !nama) {
-    errBox.innerHTML = buildErr('Harap isi NIS dan Nama Lengkap terlebih dahulu.');
-    return;
-  }
+            if (!nis || !nama) {
+                errBox.innerHTML = buildErr('Harap isi NIS dan Nama Lengkap terlebih dahulu.');
+                return;
+            }
 
-  const siswa = DATA_SISWA.find(s => s.nis === nis && s.nama === nama);
+            const siswa = DATA_SISWA.find(s => s.nis === nis && s.nama === nama);
 
-  if (!siswa) {
-    errBox.innerHTML = buildErr('Data tidak ditemukan. Pastikan NIS dan Nama Lengkap sesuai dengan data sekolah.');
-    return;
-  }
+            if (!siswa) {
+                errBox.innerHTML = buildErr('Data tidak ditemukan. Pastikan NIS dan Nama Lengkap sesuai dengan data sekolah.');
+                return;
+            }
 
-  btn.disabled = true;
-  btn.innerHTML = `Memeriksa<span class="btn-loading-dots"><span></span><span></span><span></span></span>`;
+            btn.disabled = true;
+            btn.innerHTML = `Memeriksa<span class="btn-loading-dots"><span></span><span></span><span></span></span>`;
 
-  const overlay   = document.getElementById('drama-overlay');
-  const dramaText = document.getElementById('dramaText');
-  const dramaBar  = document.getElementById('dramaBar');
-  overlay.classList.add('show');
+            const overlay = document.getElementById('drama-overlay');
+            const dramaText = document.getElementById('dramaText');
+            const dramaBar = document.getElementById('dramaBar');
+            overlay.classList.add('show');
 
-  playSuspenseSound();
+            playSuspenseSound();
 
-  await sleep(100); dramaBar.style.width = '100%';
-  await sleep(700); dramaText.textContent = 'Memverifikasi identitas...';
-  await sleep(700); dramaText.textContent = 'Data ditemukan!';
-  await sleep(500); dramaText.textContent = '✦ Mengumumkan hasil... ✦';
-  await sleep(600);
+            await sleep(100); dramaBar.style.width = '100%';
+            await sleep(700); dramaText.textContent = 'Memverifikasi identitas...';
+            await sleep(700); dramaText.textContent = 'Data ditemukan!';
+            await sleep(500); dramaText.textContent = '✦ Mengumumkan hasil... ✦';
+            await sleep(600);
 
-  overlay.classList.remove('show');
-  await sleep(100);
+            overlay.classList.remove('show');
+            await sleep(100);
 
-  const flash = document.getElementById('flash-overlay');
-  flash.classList.add('flash');
+            const flash = document.getElementById('flash-overlay');
+            flash.classList.add('flash');
 
-  playVictoryFanfare();
-  launchFireworks();
+            playVictoryFanfare();
+            launchFireworks();
 
-  await sleep(400);
-  showModal(siswa);
-  await sleep(200);
-  launchConfetti();
+            await sleep(400);
+            showModal(siswa);
+            await sleep(200);
+            launchConfetti();
 
-  btn.disabled = false;
-  btn.innerHTML = 'Periksa Kelulusan';
-  document.getElementById('nisInput').value = '';
-  document.getElementById('namaInput').value = '';
+            btn.disabled = false;
+            btn.innerHTML = 'Periksa Kelulusan';
+            document.getElementById('nisInput').value = '';
+            document.getElementById('namaInput').value = '';
 
-  setTimeout(() => flash.classList.remove('flash'), 1500);
-}
+            setTimeout(() => flash.classList.remove('flash'), 1500);
+        }
 
-function buildErr(msg) {
-  return `<div class="alert-err">
+        function buildErr(msg) {
+            return `<div class="alert-err">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#f87171"/>
     </svg>
     <span>${msg}</span>
   </div>`;
-}
+        }
 
-function showModal(siswa) {
-  const info = document.getElementById('modalInfo');
-  info.innerHTML = `
+        function showModal(siswa) {
+            const info = document.getElementById('modalInfo');
+            info.innerHTML = `
     <div class="modal-row">
       <span class="modal-row-label">NIS</span>
       <span class="modal-row-val">${siswa.nis}</span>
@@ -1532,48 +2329,49 @@ function showModal(siswa) {
       <span class="modal-row-val">2025 / 2026</span>
     </div>`;
 
-  document.getElementById('modal').classList.add('open');
-  spawnSheetConfetti();
-}
+            document.getElementById('modal').classList.add('open');
+            spawnSheetConfetti();
+        }
 
-function closeModal(e) {
-  if (e && e.target !== document.getElementById('modal')) return;
-  document.getElementById('modal').classList.remove('open');
-  confettiRunning = false;
-}
-function closeModalBtn() {
-  document.getElementById('modal').classList.remove('open');
-  confettiRunning = false;
-}
+        function closeModal(e) {
+            if (e && e.target !== document.getElementById('modal')) return;
+            document.getElementById('modal').classList.remove('open');
+            confettiRunning = false;
+        }
+        function closeModalBtn() {
+            document.getElementById('modal').classList.remove('open');
+            confettiRunning = false;
+        }
 
-function spawnSheetConfetti() {
-  const wrap = document.getElementById('confettiWrap');
-  wrap.innerHTML = '';
-  const cols = ['#c9a84c','#e8c96c','#f5e0a0','#6ee7a0','#7eb8f7','#f9a8d4'];
-  for (let i = 0; i < 80; i++) {
-    const cp = document.createElement('div');
-    cp.className = 'cp';
-    const x  = Math.random() * 100;
-    const dx = (Math.random() - 0.5) * 100 + 'px';
-    cp.style.cssText = `left:${x}%;background:${cols[Math.floor(Math.random()*cols.length)]}; animation-delay:${Math.random()*0.6}s;animation-duration:${1.8+Math.random()*1.4}s; --dx:${dx};width:${5+Math.random()*7}px;height:${5+Math.random()*7}px; border-radius:${Math.random()>0.5?'50%':'2px'};`;
-    wrap.appendChild(cp);
-  }
-}
+        function spawnSheetConfetti() {
+            const wrap = document.getElementById('confettiWrap');
+            wrap.innerHTML = '';
+            const cols = ['#c9a84c', '#e8c96c', '#f5e0a0', '#6ee7a0', '#7eb8f7', '#f9a8d4'];
+            for (let i = 0; i < 80; i++) {
+                const cp = document.createElement('div');
+                cp.className = 'cp';
+                const x = Math.random() * 100;
+                const dx = (Math.random() - 0.5) * 100 + 'px';
+                cp.style.cssText = `left:${x}%;background:${cols[Math.floor(Math.random() * cols.length)]}; animation-delay:${Math.random() * 0.6}s;animation-duration:${1.8 + Math.random() * 1.4}s; --dx:${dx};width:${5 + Math.random() * 7}px;height:${5 + Math.random() * 7}px; border-radius:${Math.random() > 0.5 ? '50%' : '2px'};`;
+                wrap.appendChild(cp);
+            }
+        }
 
-window.addEventListener('load', () => {
-  initFloatingItems();
-  initConfettiCanvas();
-  initScrollDetect(); 
+        window.addEventListener('load', () => {
+            initFloatingItems();
+            initConfettiCanvas();
+            initScrollDetect();
 
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('out');
-    document.getElementById('main').classList.add('visible');
-  }, 2800);
-});
+            setTimeout(() => {
+                document.getElementById('splash').classList.add('out');
+                document.getElementById('main').classList.add('visible');
+            }, 2800);
+        });
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && cur === 2) cekKelulusan();
-});
-</script>
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && cur === 2) cekKelulusan();
+        });
+    </script>
 </body>
+
 </html>
