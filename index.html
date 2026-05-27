@@ -930,7 +930,7 @@ body {
           </div>
           <div>
             <div class="info-label">Tanggal Pengumuman</div>
-            <div class="info-val">Rabu, 28 Mei 2026</div>
+            <div class="info-val">Selasa, 2 Juni 2026</div>
           </div>
         </div>
         <div class="info-card">
@@ -1354,6 +1354,27 @@ let cur = 0;
 const pageCount = 3;
 const labels = ['Sambutan', 'Informasi Kelulusan', 'Cek Kelulusan'];
 
+/* ── SECTION OVERWRITE: NAVIGASI LOGIC & SCROLL DETECT ─── */
+let cur = 0;
+const pageCount = 3;
+
+// Fungsi inisialisasi scroll listener untuk p0
+function initScrollDetect() {
+  const p0 = document.getElementById('p0');
+  const btnNext0 = document.getElementById('btnNext0');
+  
+  // Deteksi scroll pada p0
+  p0.addEventListener('scroll', function() {
+    // Jika posisi scroll + tinggi area terlihat >= tinggi total konten (dikurangi toleransi)
+    if (p0.scrollTop + p0.clientHeight >= p0.scrollHeight - 20) {
+      btnNext0.classList.add('show-btn'); // Munculkan tombol
+    } else {
+      // Opsi: sembunyikan lagi jika scroll ke atas (siswa harus scroll bawah lagi)
+      // btnNext0.classList.remove('show-btn'); 
+    }
+  });
+}
+
 function goTo(n) {
   if (n < 0 || n >= pageCount || n === cur) return;
   const prev = document.getElementById('p' + cur);
@@ -1376,14 +1397,7 @@ function goTo(n) {
   cur = n;
   dots.forEach((d, i) => d.classList.toggle('active', i === cur));
 
-  const btn    = document.getElementById('btnNext');
-  const label = document.getElementById('btnNextLabel');
-  if (cur >= pageCount - 1) {
-    btn.style.display = 'none';
-  } else {
-    btn.style.display = '';
-    label.textContent = labels[cur + 1];
-  }
+  // Logika tombol Next lama dihapus karena tombol sudah ada di dalam konten page
 }
 function nextPage() { goTo(cur + 1); }
 
